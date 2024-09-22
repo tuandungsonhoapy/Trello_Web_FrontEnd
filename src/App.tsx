@@ -1,14 +1,13 @@
 import Button from '@mui/material/Button'
-import ModeSwitcher from './ModeSwitcher'
+import ModeToggle from './components/ModeToggle/ModeToggle'
 
 function App() {
   return (
     <>
-      <div>TuanDungDev</div>
+      <ModeToggle />
       <Button variant="text">Text</Button>
       <Button variant="contained">Contained</Button>
       <Button variant="outlined">Outlined</Button>
-      <ModeSwitcher />
     </>
   )
 }
