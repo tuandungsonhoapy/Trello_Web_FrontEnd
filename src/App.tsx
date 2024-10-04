@@ -1,14 +1,14 @@
-import Button from '@mui/material/Button'
-import ModeToggle from './components/ModeToggle/ModeToggle'
+import Container from '@mui/material/Container'
+import Layout from './layout/Layout'
+import Board from './pages/Boards'
 
 function App() {
   return (
-    <>
-      <ModeToggle />
-      <Button variant="text">Text</Button>
-      <Button variant="contained">Contained</Button>
-      <Button variant="outlined">Outlined</Button>
-    </>
+    <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
+      <Layout>
+        <Board />
+      </Layout>
+    </Container>
   )
 }
 

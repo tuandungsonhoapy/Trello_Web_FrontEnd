@@ -6,17 +6,10 @@ import { useColorScheme } from '@mui/material'
 import LightModeIcon from '@mui/icons-material/LightMode'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
 import SettingsBrightnessIcon from '@mui/icons-material/SettingsBrightness'
-import classNames from 'classnames/bind'
 import Box from '@mui/material/Box'
-
-import styles from './ModeToggle.module.scss'
-
-const cx = classNames.bind(styles)
 
 export default function ModeToggle() {
   const { mode, setMode } = useColorScheme()
-
-  console.log(mode)
 
   const handleChange = (event: SelectChangeEvent) => {
     setMode(event.target.value as 'light' | 'dark' | 'system')
@@ -30,7 +23,7 @@ export default function ModeToggle() {
         id="demo-select-small"
         value={mode}
         label="Mode"
-        className={cx('menuItem')}
+        sx={{ display: 'flex', alignItems: 'center' }}
         onChange={handleChange}
       >
         <MenuItem value={'light'}>

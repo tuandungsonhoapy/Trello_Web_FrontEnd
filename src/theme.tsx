@@ -1,19 +1,50 @@
-import { cyan, deepOrange, orange, teal } from '@mui/material/colors'
+import { blueGrey, cyan, grey, teal } from '@mui/material/colors'
 import { experimental_extendTheme as extendTheme } from '@mui/material/styles'
 
+declare module '@mui/material/styles' {
+  interface CssVarsThemeOptions {
+    trelloCustom?: {
+      headerHeight?: string
+      boardBarHeight?: string
+    }
+  }
+}
+
+declare module '@mui/material/styles' {
+  interface Theme {
+    trelloCustom: {
+      headerHeight: string
+      boardBarHeight: string
+    }
+  }
+
+  interface ThemeOptions {
+    trelloCustom?: {
+      headerHeight?: string
+      boardBarHeight?: string
+    }
+  }
+}
+
 const theme = extendTheme({
+  trelloCustom: {
+    headerHeight: '60px',
+    boardBarHeight: '68px'
+  },
   colorSchemes: {
     light: {
       palette: {
         primary: teal,
-        secondary: deepOrange
+        secondary: grey
         // Add other palette properties here
       }
     },
     dark: {
       palette: {
-        primary: cyan,
-        secondary: orange
+        primary: {
+          main: cyan[900]
+        },
+        secondary: blueGrey
         // Add other palette properties here
       }
     }
