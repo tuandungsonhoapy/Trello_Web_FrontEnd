@@ -15,10 +15,12 @@
     "@mui/icons-material": "^5.16.7",
     "@mui/material": "^5.16.7",
     "classnames": "^2.5.1",
+    "path": "^0.12.7",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "sass": "^1.79.3",
-    "scss": "^0.2.4"
+    "scss": "^0.2.4",
+    "vite-tsconfig-paths": "^5.0.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.0",
@@ -32,6 +34,7 @@
     "globals": "^15.9.0",
     "typescript": "5.5.4",
     "typescript-eslint": "^8.0.1",
-    "vite": "^5.4.1"
+    "vite": "^5.4.1",
+    "vite-plugin-svgr": "^3.2.0"
   }
 }

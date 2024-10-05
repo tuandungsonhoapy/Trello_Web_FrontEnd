@@ -28,8 +28,8 @@ declare module '@mui/material/styles' {
 
 const theme = extendTheme({
   trelloCustom: {
-    headerHeight: '60px',
-    boardBarHeight: '68px'
+    headerHeight: '58px',
+    boardBarHeight: '62px'
   },
   colorSchemes: {
     light: {

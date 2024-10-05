@@ -1,5 +1,5 @@
 import Container from '@mui/material/Container'
-import Layout from './layout/Layout'
+import Layout from './layouts/Layout'
 import Board from './pages/Boards'
 
 function App() {
