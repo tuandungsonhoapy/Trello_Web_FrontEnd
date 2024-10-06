@@ -9,7 +9,8 @@ function BoardContent() {
           `calc(100vh - ${theme.trelloCustom.headerHeight} - ${theme.trelloCustom.boardBarHeight})`,
         alignItems: 'center',
         backgroundColor: 'primary.main',
-        width: '100%'
+        width: '100%',
+        bgcolor: (theme) => theme.palette.background.default
       }}
     ></Box>
   )

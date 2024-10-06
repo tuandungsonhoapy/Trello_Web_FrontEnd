@@ -16,14 +16,20 @@ export default function ModeToggle() {
   }
 
   return (
-    <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+    <FormControl size="small" sx={{ minWidth: '120px' }}>
       <InputLabel id="demo-select-dark-light-mode">Mode</InputLabel>
       <Select
         labelId="demo-select-dark-light-mode"
         id="demo-select-small"
         value={mode}
         label="Mode"
-        sx={{ display: 'flex', alignItems: 'center' }}
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          '.MuiSvgIcon-root': {
+            color: 'secondary.main'
+          }
+        }}
         onChange={handleChange}
       >
         <MenuItem value={'light'}>

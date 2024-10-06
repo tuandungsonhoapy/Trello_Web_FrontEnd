@@ -1,4 +1,29 @@
+import Chip from '@mui/material/Chip'
 import Box from '@mui/material/Box'
+import DashboardIcon from '@mui/icons-material/Dashboard'
+import VpnLockIcon from '@mui/icons-material/VpnLock'
+import { styled } from '@mui/material'
+import AddToDriveIcon from '@mui/icons-material/AddToDrive'
+import AutoModeIcon from '@mui/icons-material/AutoMode'
+import FilterListIcon from '@mui/icons-material/FilterList'
+import AccountGroup from '@/pages/Boards/BoardBar/AccountGroup'
+import Button from '@mui/material/Button'
+import PersonAddIcon from '@mui/icons-material/PersonAdd'
+
+const StyledChip = styled(Chip)(({ theme }) => ({
+  color: theme.palette.secondary.main,
+  backgroundColor: 'transparent',
+  border: 'none',
+  borderRadius: '6px',
+  px: '4px',
+  fontWeight: theme.trelloCustom.semiBold,
+  '& .MuiSvgIcon-root': {
+    color: theme.palette.secondary.main
+  },
+  '&:hover': {
+    backgroundColor: 'primary.100'
+  }
+}))
 
 const BoardBar = () => {
   return (
@@ -7,11 +32,38 @@ const BoardBar = () => {
         display: 'flex',
         height: (theme) => theme.trelloCustom.boardBarHeight,
         alignItems: 'center',
-        backgroundColor: 'secondary.main',
-        width: '100%'
+        width: '100%',
+        justifyContent: 'space-between',
+        px: 2,
+        gap: 2,
+        overflowX: 'auto',
+        bgcolor: (theme) =>
+          theme.palette.mode === 'light'
+            ? theme.trelloCustom.bgColor_BoardBar_Light
+            : theme.trelloCustom.bgColor_BoardBar_Dark
       }}
     >
-      <div>Board bar</div>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+        <StyledChip icon={<DashboardIcon />} label="TDDev Trello" clickable />
+        <StyledChip
+          icon={<VpnLockIcon />}
+          label="Public/Private Workspace"
+          clickable
+        />
+        <StyledChip
+          icon={<AddToDriveIcon />}
+          label="Add To Google Drive"
+          clickable
+        />
+        <StyledChip icon={<AutoModeIcon />} label="Automation" clickable />
+        <StyledChip icon={<FilterListIcon />} label="Filters" clickable />
+      </Box>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+        <Button startIcon={<PersonAddIcon />} variant="outlined">
+          Invite
+        </Button>
+        <AccountGroup />
+      </Box>
     </Box>
   )
 }
