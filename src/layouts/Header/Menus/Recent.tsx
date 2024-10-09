@@ -28,7 +28,7 @@ export default function Recent() {
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
         endIcon={<ExpandMoreIcon />}
-        sx={{ color: 'secondary.main' }}
+        sx={{ color: 'customText.primary' }}
       >
         Recent
       </Button>

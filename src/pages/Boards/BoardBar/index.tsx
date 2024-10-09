@@ -11,14 +11,14 @@ import Button from '@mui/material/Button'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
 
 const StyledChip = styled(Chip)(({ theme }) => ({
-  color: theme.palette.secondary.main,
+  color: theme.palette.customText.primary,
   backgroundColor: 'transparent',
   border: 'none',
   borderRadius: '6px',
   px: '4px',
   fontWeight: theme.trelloCustom.semiBold,
   '& .MuiSvgIcon-root': {
-    color: theme.palette.secondary.main
+    color: theme.palette.customText.primary
   },
   '&:hover': {
     backgroundColor: 'primary.100'
@@ -37,10 +37,7 @@ const BoardBar = () => {
         px: 2,
         gap: 2,
         overflowX: 'auto',
-        bgcolor: (theme) =>
-          theme.palette.mode === 'light'
-            ? theme.trelloCustom.bgColor_BoardBar_Light
-            : theme.trelloCustom.bgColor_BoardBar_Dark
+        bgcolor: (theme) => theme.palette.background.default
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>

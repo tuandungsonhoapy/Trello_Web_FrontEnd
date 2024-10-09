@@ -17,7 +17,7 @@ import AccountMenu from '@/layouts/Header/Menus/Profiles'
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
 import SearchIcon from '@mui/icons-material/Search'
 import OptionMenu from '@/layouts/Header/Menus'
-import CancelIcon from '@mui/icons-material/Cancel'
+import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined'
 
 const Header = () => {
   const [invisible] = useState(false)
@@ -34,23 +34,26 @@ const Header = () => {
         px: 2,
         gap: 2,
         overflowX: 'auto',
-        bgcolor: (theme) => theme.palette.background.default
+        bgcolor: (theme) =>
+          theme.palette.mode === 'light'
+            ? theme.trelloCustom.bgColor_Header_Light
+            : theme.trelloCustom.bgColor_Header_Dark
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-        <AppsIcon sx={{ color: 'secondary.main' }} />
+        <AppsIcon sx={{ color: 'customText.primary' }} />
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
           <SvgIcon
             component={TrelloIcon}
             inheritViewBox
             fontSize="small"
-            sx={{ color: 'secondary.main' }}
+            sx={{ color: 'customText.primary' }}
           />
           <Typography
             sx={{
               fontWeight: 'bold',
               fontSize: '1.25rem',
-              color: 'secondary.main'
+              color: 'customText.primary'
             }}
           >
             Trello
@@ -114,29 +117,29 @@ const Header = () => {
           sx={{
             minWidth: '150px',
             maxWidth: '220px'
-            // '& label': { color: 'secondary.main' },
-            // '& input': { color: 'secondary.main' },
+            // '& label': { color: 'customText.primary' },
+            // '& input': { color: 'customText.primary' },
             // '& .MuiOutlinedInput-notchedOutline': {
-            //   borderColor: 'secondary.main'
+            //   borderColor: 'customText.primary'
             // },
             // '& .MuiOutlinedInput-root': {
-            //   '&.Mui-focused fieldset': { borderColor: 'secondary.main' },
-            //   '&:hover fieldset': { borderColor: 'secondary.main' }
+            //   '&.Mui-focused fieldset': { borderColor: 'customText.primary' },
+            //   '&:hover fieldset': { borderColor: 'customText.primary' }
             // },
-            // '& label.Mui-focused': { color: 'secondary.main' }
+            // '& label.Mui-focused': { color: 'customText.primary' }
           }}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <SearchIcon sx={{ color: 'secondary.main' }} />
+                <SearchIcon sx={{ color: 'customText.primary' }} />
               </InputAdornment>
             ),
             endAdornment: (
               <InputAdornment position="end">
-                <CancelIcon
+                <HighlightOffOutlinedIcon
                   fontSize="small"
                   sx={{
-                    color: searchValue ? 'secondary.main' : 'transparent',
+                    color: searchValue ? 'customText.primary' : 'transparent',
                     cursor: 'pointer'
                   }}
                   onClick={() => setSearchValue('')}
@@ -153,12 +156,12 @@ const Header = () => {
             invisible={invisible}
             sx={{ cursor: 'pointer' }}
           >
-            <NotificationsNoneIcon sx={{ color: 'secondary.main' }} />
+            <NotificationsNoneIcon sx={{ color: 'customText.primary' }} />
           </Badge>
         </Tooltip>
         <Tooltip title="Help">
           <HelpOutlineIcon
-            sx={{ cursor: 'pointer', color: 'secondary.main' }}
+            sx={{ cursor: 'pointer', color: 'customText.primary' }}
           />
         </Tooltip>
         <AccountMenu />

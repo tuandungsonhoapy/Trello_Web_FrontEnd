@@ -12,7 +12,10 @@ function AccountGroup() {
           width: '31px',
           height: '31px',
           fontSize: '1rem',
-          border: 'none'
+          border: 'none',
+          color: 'white',
+          cursor: 'pointer',
+          '&:first-of-type': { bgcolor: '#a4b0be' }
         }
       }}
     >

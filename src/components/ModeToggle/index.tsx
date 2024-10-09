@@ -27,7 +27,7 @@ export default function ModeToggle() {
           display: 'flex',
           alignItems: 'center',
           '.MuiSvgIcon-root': {
-            color: 'secondary.main'
+            color: 'customText.primary'
           }
         }}
         onChange={handleChange}
