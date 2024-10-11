@@ -10,6 +10,8 @@ declare module '@mui/material/styles' {
       semiBold?: number
       bgColor_Header_Light?: string
       bgColor_Header_Dark?: string
+      columnHeaderHeight?: string
+      columnFooterHeight?: string
     }
   }
 
@@ -35,6 +37,8 @@ declare module '@mui/material/styles' {
       semiBold: number
       bgColor_Header_Light: string
       bgColor_Header_Dark: string
+      columnHeaderHeight: string
+      columnFooterHeight: string
     }
   }
 
@@ -46,6 +50,8 @@ declare module '@mui/material/styles' {
       semiBold?: number
       bgColor_Header_Light?: string
       bgColor_Header_Dark?: string
+      columnHeaderHeight?: string
+      columnFooterHeight?: string
     }
   }
 }
@@ -53,6 +59,8 @@ declare module '@mui/material/styles' {
 const HEADER_HEIGHT = '56px'
 const BOARD_BAR_HEIGHT = '58px'
 const BOARD_CONTENT_HEIGHT = `calc(100vh - ${HEADER_HEIGHT} - ${BOARD_BAR_HEIGHT})`
+const COLUMN_HEADER_HEIGHT = '50px'
+const COLUMN_FOOTER_HEIGHT = '56px'
 
 const theme = extendTheme({
   trelloCustom: {
@@ -61,7 +69,9 @@ const theme = extendTheme({
     boardContentHeight: BOARD_CONTENT_HEIGHT,
     semiBold: 500,
     bgColor_Header_Light: '#1B1464',
-    bgColor_Header_Dark: 'hsl(204deg 14.29% 6.86%)'
+    bgColor_Header_Dark: 'hsl(204deg 14.29% 6.86%)',
+    columnHeaderHeight: COLUMN_HEADER_HEIGHT,
+    columnFooterHeight: COLUMN_FOOTER_HEIGHT
   },
   colorSchemes: {
     light: {
