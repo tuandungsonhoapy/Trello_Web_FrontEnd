@@ -80,7 +80,7 @@ const theme = extendTheme({
           main: '#ecf0f1'
         },
         background: {
-          default: '#0652DD'
+          default: '#053bb0'
         },
         customText: {
           primary: '#ecf0f1'
@@ -90,13 +90,13 @@ const theme = extendTheme({
     dark: {
       palette: {
         secondary: {
-          main: '#8e44ad'
+          main: '#a156c2'
         },
         background: {
           default: '#1e272e'
         },
         customText: {
-          primary: '#8e44ad'
+          primary: '#a156c2'
         }
       }
     }

@@ -9,6 +9,8 @@ import FilterListIcon from '@mui/icons-material/FilterList'
 import AccountGroup from '@/pages/Boards/BoardBar/AccountGroup'
 import Button from '@mui/material/Button'
 import PersonAddIcon from '@mui/icons-material/PersonAdd'
+import { boardInterface } from '@/interface/board-interface'
+import { capitalizeFirstLetter } from '@/utils/formatter'
 
 const StyledChip = styled(Chip)(({ theme }) => ({
   color: theme.palette.customText.primary,
@@ -25,7 +27,7 @@ const StyledChip = styled(Chip)(({ theme }) => ({
   }
 }))
 
-const BoardBar = () => {
+const BoardBar = ({ board }: { board: boardInterface }) => {
   return (
     <Box
       sx={{
@@ -41,10 +43,10 @@ const BoardBar = () => {
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-        <StyledChip icon={<DashboardIcon />} label="TDDev Trello" clickable />
+        <StyledChip icon={<DashboardIcon />} label={board?.title} clickable />
         <StyledChip
           icon={<VpnLockIcon />}
-          label="Public/Private Workspace"
+          label={capitalizeFirstLetter(board?.type)}
           clickable
         />
         <StyledChip
