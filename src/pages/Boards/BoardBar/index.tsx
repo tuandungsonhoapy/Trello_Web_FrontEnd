@@ -27,7 +27,7 @@ const StyledChip = styled(Chip)(({ theme }) => ({
   }
 }))
 
-const BoardBar = ({ board }: { board: boardInterface }) => {
+const BoardBar = ({ board }: { board: boardInterface | null }) => {
   return (
     <Box
       sx={{
@@ -46,7 +46,7 @@ const BoardBar = ({ board }: { board: boardInterface }) => {
         <StyledChip icon={<DashboardIcon />} label={board?.title} clickable />
         <StyledChip
           icon={<VpnLockIcon />}
-          label={capitalizeFirstLetter(board?.type)}
+          label={capitalizeFirstLetter(board?.type || '')}
           clickable
         />
         <StyledChip

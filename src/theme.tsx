@@ -19,11 +19,17 @@ declare module '@mui/material/styles' {
     customText: {
       primary: string
     }
+    constrastMode: {
+      main: string
+    }
   }
 
   interface PaletteOptions {
     customText?: {
       primary?: string
+    }
+    constrastMode?: {
+      main?: string
     }
   }
 }
@@ -84,6 +90,9 @@ const theme = extendTheme({
         },
         customText: {
           primary: '#ecf0f1'
+        },
+        constrastMode: {
+          main: '#000000'
         }
       }
     },
@@ -97,6 +106,9 @@ const theme = extendTheme({
         },
         customText: {
           primary: '#a156c2'
+        },
+        constrastMode: {
+          main: '#ffffff'
         }
       }
     }

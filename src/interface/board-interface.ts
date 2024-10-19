@@ -23,9 +23,10 @@ export interface boardInterface {
   _id: string
   title: string
   description: string
-  type: string
-  ownerIds: Array<any>
-  memberIds: Array<any>
+  slug?: string
+  type?: string
+  ownerIds?: Array<any>
+  memberIds?: Array<any>
   columnOrderIds: Array<string>
   columns?: Array<columnInterface>
 }

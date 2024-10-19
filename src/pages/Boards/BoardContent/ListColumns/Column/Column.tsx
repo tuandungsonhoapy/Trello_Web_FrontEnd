@@ -15,12 +15,19 @@ import DragHandleOutlinedIcon from '@mui/icons-material/DragHandleOutlined'
 import Button from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import * as React from 'react'
+import { useState, useRef } from 'react'
 import Menu from '@mui/material/Menu'
 import ListCards from '@/pages/Boards/BoardContent/ListColumns/Column/ListCards/ListCards'
 import { columnInterface } from '@/interface/board-interface'
 import { mapOrder } from '@/utils/sort'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
+import { FieldErrors, useForm } from 'react-hook-form'
+import { cardSchema, CardSchemaType } from '@/utils/validationSchemas'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { toast } from 'react-toastify'
+import { InputAdornment, TextField } from '@mui/material'
+import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined'
 
 function Column({ column }: { column: columnInterface }) {
   const {
@@ -40,6 +47,39 @@ function Column({ column }: { column: columnInterface }) {
   }
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
+
+  const [isAddingCard, setIsAddingCard] = useState<boolean>(false)
+  const [cardTitle, setCardTitle] = useState<string>('')
+  const textFieldRef = useRef<HTMLInputElement>(null)
+
+  // * React-hook-form
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    clearErrors
+  } = useForm<CardSchemaType>({
+    resolver: zodResolver(cardSchema)
+  })
+
+  const onSubmit = (data: CardSchemaType) => {
+    console.log('data:', data)
+    toggleAddCard()
+    setCardTitle('')
+  }
+
+  const onError = (errors: FieldErrors) => {
+    if (errors.title)
+      if (typeof errors.title?.message === 'string') {
+        toast.error(errors.title.message)
+      }
+  }
+
+  const toggleAddCard = () => {
+    setIsAddingCard(!isAddingCard)
+    clearErrors()
+  }
+
   const open = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<SVGSVGElement>) => {
     setAnchorEl(event.currentTarget as unknown as HTMLElement)
@@ -158,24 +198,128 @@ function Column({ column }: { column: columnInterface }) {
         <Box
           sx={{
             height: (theme) => theme.trelloCustom.columnFooterHeight,
-            px: 2,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between'
+            px: '12px'
           }}
         >
-          <Button
-            sx={{
-              color: (theme) =>
-                theme.palette.mode === 'dark' ? 'white' : 'black'
-            }}
-            startIcon={<AddCardOutlinedIcon />}
-          >
-            Add new card
-          </Button>
-          <Tooltip title={'more options'}>
-            <DragHandleOutlinedIcon sx={{ cursor: 'pointer' }} />
-          </Tooltip>
+          {!isAddingCard ? (
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                height: '100%'
+              }}
+            >
+              <Button
+                sx={{
+                  color: (theme) =>
+                    theme.palette.mode === 'dark' ? 'white' : 'black'
+                }}
+                startIcon={<AddCardOutlinedIcon />}
+                onClick={toggleAddCard}
+              >
+                Add new card
+              </Button>
+              <Tooltip title={'more options'}>
+                <DragHandleOutlinedIcon sx={{ cursor: 'pointer' }} />
+              </Tooltip>
+            </Box>
+          ) : (
+            <Box
+              sx={{
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1
+              }}
+            >
+              <form
+                style={{
+                  height: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '4px'
+                }}
+                onSubmit={handleSubmit(onSubmit, onError)}
+              >
+                <TextField
+                  sx={{
+                    '& label': { color: 'constrastMode.main' },
+                    '& input': { color: 'constrastMode.main' },
+                    '& .MuiOutlinedInput-notchedOutline': {
+                      borderColor: 'constrastMode.main'
+                    },
+                    '& .MuiOutlinedInput-root': {
+                      '&.Mui-focused fieldset': {
+                        borderColor: 'constrastMode.main'
+                      },
+                      '&:hover fieldset': { borderColor: 'constrastMode.main' }
+                    },
+                    '& label.Mui-focused': { color: 'constrastMode.main' }
+                  }}
+                  size="small"
+                  label="Card Title"
+                  {...register('title')}
+                  value={cardTitle}
+                  onChange={(e) => setCardTitle(e.target.value)}
+                  type="text"
+                  data-no-dnd="true"
+                  inputRef={textFieldRef}
+                  autoFocus
+                  error={errors.title ? true : false}
+                  variant="outlined"
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <HighlightOffOutlinedIcon
+                          fontSize="small"
+                          sx={{
+                            color: cardTitle
+                              ? 'constrastMode.main'
+                              : 'transparent',
+                            cursor: 'pointer'
+                          }}
+                          onClick={() => {
+                            setCardTitle('')
+                            textFieldRef.current?.focus()
+                          }}
+                        />
+                      </InputAdornment>
+                    )
+                  }}
+                />
+                <Button
+                  variant="contained"
+                  data-no-dnd="true"
+                  size="small"
+                  sx={{
+                    color: 'customText.primary',
+                    bgcolor: (theme) =>
+                      theme.palette.mode === 'light' ? '#053bb0' : '#1e272e',
+                    boxShadow: 'none',
+                    height: '37px',
+                    '&:hover': {
+                      bgcolor: (theme) =>
+                        theme.palette.mode === 'light'
+                          ? theme.trelloCustom.bgColor_Header_Light
+                          : theme.trelloCustom.bgColor_Header_Dark
+                    }
+                  }}
+                  type="submit"
+                >
+                  Add
+                </Button>
+                <HighlightOffOutlinedIcon
+                  fontSize="small"
+                  sx={{
+                    color: 'constrastMode.main',
+                    cursor: 'pointer'
+                  }}
+                  onClick={toggleAddCard}
+                />
+              </form>
+            </Box>
+          )}
         </Box>
       </Box>
     </div>

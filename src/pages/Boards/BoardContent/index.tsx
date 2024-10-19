@@ -19,9 +19,10 @@ import {
 } from '@dnd-kit/core'
 import { mapOrder } from '@/utils/sort'
 import { arrayMove } from '@dnd-kit/sortable'
-import { MouseSensor, TouchSensor, useSensor, useSensors } from '@dnd-kit/core'
+import { useSensor, useSensors } from '@dnd-kit/core'
 import { cloneDeep, isEmpty } from 'lodash'
 
+import { MouseSensor, TouchSensor } from '@/customLibraries/DndKitSensors'
 import Column from '@/pages/Boards/BoardContent/ListColumns/Column/Column'
 import Card from '@/pages/Boards/BoardContent/ListColumns/Column/ListCards/Card/Card'
 import { generatePlaceholderCard } from '@/utils/formatter'
@@ -31,9 +32,9 @@ const ACTIVE_DRAG_ITEM_TYPE = {
   CARD: 'CARD_TYPE'
 }
 
-function BoardContent({ board }: { board: boardInterface }) {
+function BoardContent({ board }: { board: boardInterface | null }) {
   const [columns, setColumns] = useState(
-    mapOrder(board?.columns || [], board?.columnOrderIds, '_id')
+    mapOrder(board?.columns || [], board?.columnOrderIds || [], '_id')
   )
   const [activeDragItemType, setActiveDragItemType] = useState<string | null>(
     null
