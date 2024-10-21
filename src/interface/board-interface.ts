@@ -8,6 +8,7 @@ export interface cardInterface {
   memberIds?: Array<string>
   comments?: Array<string>
   attachments?: Array<string>
+  createdAt?: string
   FE_PlaceholderCard?: boolean
 }
 
@@ -17,6 +18,7 @@ export interface columnInterface {
   title?: string
   cardOrderIds?: Array<string>
   cards?: Array<cardInterface>
+  createdAt?: string
 }
 
 export interface boardInterface {
@@ -29,4 +31,5 @@ export interface boardInterface {
   memberIds?: Array<any>
   columnOrderIds: Array<string>
   columns?: Array<columnInterface>
+  createdAt?: string
 }

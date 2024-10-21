@@ -19,7 +19,6 @@ import { useState, useRef } from 'react'
 import Menu from '@mui/material/Menu'
 import ListCards from '@/pages/Boards/BoardContent/ListColumns/Column/ListCards/ListCards'
 import { columnInterface } from '@/interface/board-interface'
-import { mapOrder } from '@/utils/sort'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import { FieldErrors, useForm } from 'react-hook-form'
@@ -28,8 +27,15 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { toast } from 'react-toastify'
 import { InputAdornment, TextField } from '@mui/material'
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined'
+import { createCardAPI } from '@/apis/cardAPI'
+import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks'
+import { addNewCard } from '@/redux/boardsSlice'
 
 function Column({ column }: { column: columnInterface }) {
+  const board = useAppSelector((state) => state.boards.activeBoard)
+
+  const dispatch = useAppDispatch()
+
   const {
     attributes,
     listeners,
@@ -63,7 +69,18 @@ function Column({ column }: { column: columnInterface }) {
   })
 
   const onSubmit = (data: CardSchemaType) => {
-    console.log('data:', data)
+    if (board) {
+      createCardAPI({ ...data, columnId: column._id, boardId: board._id })
+        .then((data) => {
+          dispatch(addNewCard(data))
+          toast.success('Card created successfully')
+        })
+        .catch((error) => {
+          toast.error('Card not created')
+          console.log('error-create-card', error)
+        })
+    } else toast.error('Board not found')
+
     toggleAddCard()
     setCardTitle('')
   }
@@ -187,13 +204,7 @@ function Column({ column }: { column: columnInterface }) {
           </Box>
         </Box>
         {/* Column Content */}
-        <ListCards
-          cards={mapOrder(
-            column?.cards || [],
-            column?.cardOrderIds || [],
-            '_id'
-          )}
-        />
+        <ListCards cards={column.cards || []} />
         {/* Column Footer */}
         <Box
           sx={{

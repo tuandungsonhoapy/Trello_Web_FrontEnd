@@ -13,11 +13,17 @@ import { useForm, FieldErrors } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { columnSchema, ColumnSchemaType } from '@/utils/validationSchemas'
 import { toast } from 'react-toastify'
+import { createColumnAPI } from '@/apis/columnAPI'
+import { useAppSelector, useAppDispatch } from '@/hooks/reduxHooks'
+import { addNewColumn } from '@/redux/boardsSlice'
 
 function ListColumns({ columns }: { columns: Array<columnInterface> }) {
   const [isAddingColumn, setIsAddingColumn] = useState<boolean>(false)
   const [columnTitle, setColumnTitle] = useState<string>('')
   const textFieldRef = useRef<HTMLInputElement>(null)
+  const board = useAppSelector((state) => state.boards.activeBoard)
+
+  const dispatch = useAppDispatch()
 
   // * React-hook-form
   const {
@@ -30,7 +36,20 @@ function ListColumns({ columns }: { columns: Array<columnInterface> }) {
   })
 
   const onSubmit = (data: ColumnSchemaType) => {
-    console.log('data:', data)
+    if (board) {
+      createColumnAPI({ ...data, boardId: board._id })
+        .then((data) => {
+          dispatch(addNewColumn(data as columnInterface))
+          toast.success('Column created successfully')
+        })
+        .catch((error) => {
+          toast.error('Column not created')
+          console.log('error-after-createColumn', error)
+        })
+    } else {
+      toast.error('Board not found')
+    }
+
     toggleAddColumn()
     setColumnTitle('')
   }

@@ -1,7 +1,11 @@
-import { useCallback, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import ListColumns from '@/pages/Boards/BoardContent/ListColumns/ListColumns'
-import { boardInterface, columnInterface } from '@/interface/board-interface'
+import {
+  boardInterface,
+  cardInterface,
+  columnInterface
+} from '@/interface/board-interface'
 import {
   DndContext,
   DragEndEvent,
@@ -17,7 +21,6 @@ import {
   rectIntersection,
   getFirstCollision
 } from '@dnd-kit/core'
-import { mapOrder } from '@/utils/sort'
 import { arrayMove } from '@dnd-kit/sortable'
 import { useSensor, useSensors } from '@dnd-kit/core'
 import { cloneDeep, isEmpty } from 'lodash'
@@ -26,6 +29,10 @@ import { MouseSensor, TouchSensor } from '@/customLibraries/DndKitSensors'
 import Column from '@/pages/Boards/BoardContent/ListColumns/Column/Column'
 import Card from '@/pages/Boards/BoardContent/ListColumns/Column/ListCards/Card/Card'
 import { generatePlaceholderCard } from '@/utils/formatter'
+import { moveCardToAnotherColumnAPI, updateBoardAPI } from '@/apis/boardAPI'
+import { updateColumnAPI } from '@/apis/columnAPI'
+import { updateBoard, updateColumn } from '@/redux/boardsSlice'
+import { useAppDispatch } from '@/hooks/reduxHooks'
 
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'COLUMN_TYPE',
@@ -33,9 +40,10 @@ const ACTIVE_DRAG_ITEM_TYPE = {
 }
 
 function BoardContent({ board }: { board: boardInterface | null }) {
-  const [columns, setColumns] = useState(
-    mapOrder(board?.columns || [], board?.columnOrderIds || [], '_id')
-  )
+  const [columns, setColumns] = useState<Array<columnInterface>>([])
+
+  const dispatch = useAppDispatch()
+
   const [activeDragItemType, setActiveDragItemType] = useState<string | null>(
     null
   )
@@ -71,7 +79,6 @@ function BoardContent({ board }: { board: boardInterface | null }) {
   }
 
   const handleDragStart = (event: DragStartEvent) => {
-    console.log(event)
     setActiveDragItemId(event?.active?.id)
     setActiveDragItemType(
       event?.active?.data?.current?.columnId
@@ -179,8 +186,6 @@ function BoardContent({ board }: { board: boardInterface | null }) {
           )
         }
 
-        console.log('newOverColumn-handleDragOver', newColumns)
-
         return newColumns
       })
     }
@@ -203,9 +208,12 @@ function BoardContent({ board }: { board: boardInterface | null }) {
 
       if (!activeColumn || !overColumn) return
 
+      // * Xử lý kéo thả card giữa các column
       if (oldColumn && oldColumn._id !== overColumn._id) {
         setColumns((prev) => {
           const newColumns = cloneDeep(prev)
+
+          // * Column mới chứa card được kéo qua
           const newColumn = newColumns.find(
             (column) => column._id === overColumn._id
           )
@@ -227,15 +235,46 @@ function BoardContent({ board }: { board: boardInterface | null }) {
             }
           }
 
+          // * Cập nhật activeBoard trong store Redux
+          dispatch(
+            updateBoard({
+              columns: newColumns,
+              columnOrderIds: newColumns.map((column) => column._id)
+            } as boardInterface)
+          )
+
+          // * Call API
+          let cardOrderIdsOfOldColumn = oldColumn?.cardOrderIds || []
+          if (cardOrderIdsOfOldColumn[0].includes('placeholder-card'))
+            cardOrderIdsOfOldColumn = []
+          moveCardToAnotherColumnAPI({
+            fromColumnId: oldColumn._id,
+            toColumnId: overColumn._id,
+            cardId: activeDraggingCardId.toString(),
+            cardOrderIdsOfOldColumn,
+            cardOrderIdsOfNewColumn: newColumn?.cardOrderIds || []
+          })
           return newColumns
         })
       } else {
+        // * Xử lý kéo thả card trong cùng 1 column
         const oldCardIndex = oldColumn?.cards?.findIndex(
           (card) => card._id === activeDraggingCardId
         )
         const newCardIndex = overColumn?.cards?.findIndex(
           (card) => card._id === overCardId
         )
+
+        let dndOrderedCards: Array<cardInterface> = []
+
+        if (oldCardIndex !== undefined && newCardIndex !== undefined) {
+          dndOrderedCards = arrayMove(
+            oldColumn?.cards || [],
+            oldCardIndex,
+            newCardIndex
+          )
+        }
+        const dndOrderedCardIds = dndOrderedCards.map((card) => card._id)
         setColumns((prev) => {
           const newColumns = cloneDeep(prev)
           const newColumn = newColumns.find(
@@ -246,15 +285,27 @@ function BoardContent({ board }: { board: boardInterface | null }) {
             newCardIndex !== undefined &&
             oldCardIndex !== undefined
           ) {
-            newColumn.cards = arrayMove(
-              newColumn.cards || [],
-              oldCardIndex,
-              newCardIndex
-            )
-            newColumn.cardOrderIds = newColumn.cards.map((card) => card._id)
+            newColumn.cards = dndOrderedCards
+            newColumn.cardOrderIds = dndOrderedCardIds
           }
           return newColumns
         })
+
+        // * Call API update cardOrderIds
+        if (oldColumn?._id) {
+          // * Cập nhật state overColumn thuộc activeBoard trong store Redux
+          dispatch(
+            updateColumn({
+              cardOrderIds: dndOrderedCardIds,
+              cards: dndOrderedCards,
+              _id: oldColumn._id
+            } as columnInterface)
+          )
+          // * Call API
+          updateColumnAPI(oldColumn?._id, {
+            cardOrderIds: dndOrderedCardIds
+          } as columnInterface)
+        }
       }
     }
 
@@ -272,8 +323,27 @@ function BoardContent({ board }: { board: boardInterface | null }) {
           oldColumnIndex,
           newColumnIndex
         )
-        //const dndOrderedColumnIds = dndOrderedColumns.map((column) => column._id)
+        const dndOrderedColumnIds = dndOrderedColumns.map(
+          (column) => column._id
+        )
+
         setColumns(dndOrderedColumns)
+
+        // * Call API update columnOrderIds
+        if (board?._id) {
+          // * Cập nhật state activeBoard trong store Redux
+          dispatch(
+            updateBoard({
+              columnOrderIds: dndOrderedColumnIds,
+              columns: dndOrderedColumns
+            } as boardInterface)
+          )
+
+          // * Call API
+          updateBoardAPI(board._id, {
+            columnOrderIds: dndOrderedColumnIds
+          } as boardInterface)
+        }
       }
     }
 
@@ -320,7 +390,6 @@ function BoardContent({ board }: { board: boardInterface | null }) {
           (column) => column._id === overId
         )
         if (intersectionColumn) {
-          console.log('overId-before', overId)
           overId = closestCorners({
             ...args,
             droppableContainers: args.droppableContainers.filter(
@@ -331,7 +400,6 @@ function BoardContent({ board }: { board: boardInterface | null }) {
                 )
             )
           })[0]?.id
-          console.log('overId-after', overId)
         }
 
         lastOverId.current = overId
@@ -342,6 +410,10 @@ function BoardContent({ board }: { board: boardInterface | null }) {
     },
     [activeDragItemType, columns]
   )
+
+  useEffect(() => {
+    setColumns(board?.columns || [])
+  }, [board])
 
   return (
     <DndContext

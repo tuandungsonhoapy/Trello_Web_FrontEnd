@@ -12,6 +12,7 @@ declare module '@mui/material/styles' {
       bgColor_Header_Dark?: string
       columnHeaderHeight?: string
       columnFooterHeight?: string
+      contentLayoutHeight?: string
     }
   }
 
@@ -45,6 +46,7 @@ declare module '@mui/material/styles' {
       bgColor_Header_Dark: string
       columnHeaderHeight: string
       columnFooterHeight: string
+      contentLayoutHeight: string
     }
   }
 
@@ -58,6 +60,7 @@ declare module '@mui/material/styles' {
       bgColor_Header_Dark?: string
       columnHeaderHeight?: string
       columnFooterHeight?: string
+      contentLayoutHeight?: string
     }
   }
 }
@@ -67,6 +70,7 @@ const BOARD_BAR_HEIGHT = '58px'
 const BOARD_CONTENT_HEIGHT = `calc(100vh - ${HEADER_HEIGHT} - ${BOARD_BAR_HEIGHT})`
 const COLUMN_HEADER_HEIGHT = '50px'
 const COLUMN_FOOTER_HEIGHT = '56px'
+const CONTENT_LAYOUT = `calc(100vh - ${HEADER_HEIGHT})`
 
 const theme = extendTheme({
   trelloCustom: {
@@ -77,7 +81,8 @@ const theme = extendTheme({
     bgColor_Header_Light: '#1B1464',
     bgColor_Header_Dark: 'hsl(204deg 14.29% 6.86%)',
     columnHeaderHeight: COLUMN_HEADER_HEIGHT,
-    columnFooterHeight: COLUMN_FOOTER_HEIGHT
+    columnFooterHeight: COLUMN_FOOTER_HEIGHT,
+    contentLayoutHeight: CONTENT_LAYOUT
   },
   colorSchemes: {
     light: {
