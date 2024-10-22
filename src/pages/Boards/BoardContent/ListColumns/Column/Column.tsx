@@ -29,7 +29,9 @@ import { InputAdornment, TextField } from '@mui/material'
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined'
 import { createCardAPI } from '@/apis/cardAPI'
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks'
-import { addNewCard } from '@/redux/boardsSlice'
+import { addNewCard, deleteColumn } from '@/redux/boardsSlice'
+import { useConfirm } from 'material-ui-confirm'
+import { deleteColumnAPI } from '@/apis/columnAPI'
 
 function Column({ column }: { column: columnInterface }) {
   const board = useAppSelector((state) => state.boards.activeBoard)
@@ -105,6 +107,40 @@ function Column({ column }: { column: columnInterface }) {
     setAnchorEl(null)
   }
 
+  const confirmDeleteColumn = useConfirm()
+
+  const handleDeleteColumn = () => {
+    confirmDeleteColumn({
+      title: 'Are you sure you want to delete this column?',
+      description: 'This action will permanent delete your column!',
+      confirmationText: 'Confirm',
+      confirmationButtonProps: {
+        variant: 'contained',
+        color: 'error',
+        style: {
+          color: 'black'
+        }
+      },
+      cancellationButtonProps: {
+        variant: 'contained',
+        color: 'primary',
+        style: {
+          color: 'black'
+        }
+      }
+    })
+      .then(() => {
+        // * Cập nhật dữ liệu state activeBoard trong store redux
+        dispatch(deleteColumn(column._id))
+
+        // * Gọi API xóa column
+        deleteColumnAPI(column._id)
+      })
+      .catch(() => {
+        /* ... */
+      })
+  }
+
   return (
     <div ref={setNodeRef} {...attributes} style={dndKitStyles}>
       <Box
@@ -159,11 +195,12 @@ function Column({ column }: { column: columnInterface }) {
               anchorEl={anchorEl}
               open={open}
               onClose={handleClose}
+              onClick={handleClose}
               MenuListProps={{
                 'aria-labelledby': 'basic-column-dropdown"'
               }}
             >
-              <MenuItem>
+              <MenuItem onClick={toggleAddCard}>
                 <ListItemIcon>
                   <AddCardOutlinedIcon fontSize="small" />
                 </ListItemIcon>
@@ -188,7 +225,7 @@ function Column({ column }: { column: columnInterface }) {
                 <ListItemText>Paste</ListItemText>
               </MenuItem>
               <Divider />
-              <MenuItem>
+              <MenuItem onClick={handleDeleteColumn}>
                 <ListItemIcon>
                   <DeleteForeverOutlinedIcon fontSize="small" />
                 </ListItemIcon>

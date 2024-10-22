@@ -19,3 +19,9 @@ export const updateColumnAPI = async (
   console.log('response updateColumnAPI', response)
   return response.data
 }
+
+export const deleteColumnAPI = async (columnId: string) => {
+  const response = await axiosInstance.delete(`/columns/${columnId}`)
+  console.log('response deleteColumnAPI', response)
+  return response.data
+}

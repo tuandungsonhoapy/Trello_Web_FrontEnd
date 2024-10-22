@@ -111,6 +111,57 @@ const boardsSlice = createSlice({
           ...action.payload
         } as columnInterface
       }
+    },
+    deleteColumn(state, action: PayloadAction<string>) {
+      if (state.activeBoard) {
+        state.activeBoard.columns = state.activeBoard.columns?.filter(
+          (column) => column._id !== action.payload
+        )
+        state.activeBoard.columnOrderIds =
+          state.activeBoard.columnOrderIds?.filter(
+            (id) => id !== action.payload
+          )
+      }
+    },
+    updateCard(state, action: PayloadAction<cardInterface>) {
+      const columnContainCard = state.activeBoard?.columns?.find(
+        (column) => column._id === action.payload.columnId
+      )
+
+      if (columnContainCard) {
+        const cardIndex = columnContainCard.cards?.findIndex(
+          (card) => card._id === action.payload._id
+        )
+
+        if (
+          columnContainCard.cards &&
+          cardIndex !== undefined &&
+          cardIndex !== -1
+        ) {
+          columnContainCard.cards[cardIndex] = {
+            ...columnContainCard.cards[cardIndex],
+            ...action.payload
+          } as cardInterface
+        }
+      }
+    },
+    deleteCard(state, action: PayloadAction<cardInterface>) {
+      const columnContainCard = state.activeBoard?.columns?.find(
+        (column) => column._id === action.payload.columnId
+      )
+
+      if (columnContainCard) {
+        columnContainCard.cards = columnContainCard.cards?.filter(
+          (card) => card._id !== action.payload._id
+        )
+        columnContainCard.cardOrderIds = columnContainCard.cardOrderIds?.filter(
+          (id) => id !== action.payload._id
+        )
+        if (isEmpty(columnContainCard.cards)) {
+          columnContainCard.cards = [generatePlaceholderCard(columnContainCard)]
+          columnContainCard.cardOrderIds = [columnContainCard.cards[0]._id]
+        }
+      }
     }
   }
 })
@@ -121,7 +172,10 @@ export const {
   addNewColumn,
   addNewCard,
   updateBoard,
-  updateColumn
+  updateColumn,
+  deleteColumn,
+  updateCard,
+  deleteCard
 } = boardsSlice.actions
 
 export default boardsSlice.reducer

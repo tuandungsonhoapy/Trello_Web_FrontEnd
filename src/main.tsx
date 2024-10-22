@@ -6,13 +6,16 @@ import 'react-toastify/dist/ReactToastify.css'
 import { store } from '@/redux/store.ts'
 import { Provider } from 'react-redux'
 import CssBaseline from '@mui/material/CssBaseline'
+import { ConfirmProvider } from 'material-ui-confirm'
 
 createRoot(document.getElementById('root')!).render(
   <>
     <CssVarsProvider theme={theme}>
       <CssBaseline />
       <Provider store={store}>
-        <App />
+        <ConfirmProvider>
+          <App />
+        </ConfirmProvider>
       </Provider>
     </CssVarsProvider>
   </>
