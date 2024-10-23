@@ -99,10 +99,7 @@ function BoardContent({ board }: { board: boardInterface | null }) {
     if (!over || !active) return
     if (active.id === over.id) return
 
-    const {
-      id: activeDraggingCardId,
-      data: { current: activeDraggingCardData }
-    } = active
+    const { id: activeDraggingCardId } = active
     const { id: overCardId } = over
 
     // * Xác định 2 column active và over
@@ -132,8 +129,8 @@ function BoardContent({ board }: { board: boardInterface | null }) {
             overCardIndex >= 0
               ? overCardIndex + modifier
               : overColumn?.cards
-              ? overColumn.cards.length + 1
-              : 0
+                ? overColumn.cards.length + 1
+                : 0
 
         const newColumns = cloneDeep(prev)
         const newActiveColumn = newColumns.find(
@@ -175,8 +172,9 @@ function BoardContent({ board }: { board: boardInterface | null }) {
 
           setActiveDragItemData(newActiveDragItemData)
 
+          // * Thêm card vào vị trí mới trong over column
           newOverColumn.cards = newOverColumn?.cards?.toSpliced(
-            newCardIndex,
+            newCardIndex ?? 0,
             0,
             newActiveDragItemData
           )
@@ -197,10 +195,7 @@ function BoardContent({ board }: { board: boardInterface | null }) {
     if (!active || !over) return
 
     if (activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD) {
-      const {
-        id: activeDraggingCardId,
-        data: { current: activeDraggingCardData }
-      } = active
+      const { id: activeDraggingCardId } = active
       const { id: overCardId } = over
 
       const activeColumn = findColumnByCardId(activeDraggingCardId)
@@ -438,12 +433,12 @@ function BoardContent({ board }: { board: boardInterface | null }) {
           {(!activeDragItemId || !activeDragItemType) && null}
           {activeDragItemId &&
             activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && (
-              <Column column={activeDragItemData} />
-            )}
+            <Column column={activeDragItemData} />
+          )}
           {activeDragItemId &&
             activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD && (
-              <Card card={activeDragItemData} />
-            )}
+            <Card card={activeDragItemData} />
+          )}
         </DragOverlay>
       </Box>
     </DndContext>
