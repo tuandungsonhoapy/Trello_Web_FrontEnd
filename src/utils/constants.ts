@@ -9,3 +9,31 @@ if (import.meta.env.PROD) {
 }
 
 export const API_ROOT = apiRoot
+
+export const cssTextFieldCustomText = {
+  '& label': { color: 'customText.primary' },
+  '& input': { color: 'customText.primary' },
+  '& .MuiOutlinedInput-notchedOutline': {
+    borderColor: 'customText.primary'
+  },
+  '& .MuiOutlinedInput-root': {
+    '&.Mui-focused fieldset': { borderColor: 'customText.primary' },
+    '&:hover fieldset': { borderColor: 'customText.primary' }
+  },
+  '& label.Mui-focused': { color: 'customText.primary' }
+}
+
+export const cssTextFieldContrastText = {
+  '& label': { color: 'constrastMode.main' },
+  '& input': { color: 'constrastMode.main' },
+  '& .MuiOutlinedInput-notchedOutline': {
+    borderColor: 'constrastMode.main'
+  },
+  '& .MuiOutlinedInput-root': {
+    '&.Mui-focused fieldset': {
+      borderColor: 'constrastMode.main'
+    },
+    '&:hover fieldset': { borderColor: 'constrastMode.main' }
+  },
+  '& label.Mui-focused': { color: 'constrastMode.main' }
+}

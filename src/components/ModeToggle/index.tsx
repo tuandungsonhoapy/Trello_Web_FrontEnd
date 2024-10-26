@@ -16,7 +16,22 @@ export default function ModeToggle() {
   }
 
   return (
-    <FormControl size="small" sx={{ minWidth: '120px' }}>
+    <FormControl
+      size="small"
+      sx={{
+        minWidth: '120px',
+        '& label': { color: 'customText.primary' },
+        '& input': { color: 'customText.primary' },
+        '& .MuiOutlinedInput-notchedOutline': {
+          borderColor: 'customText.primary'
+        },
+        '& .MuiOutlinedInput-root': {
+          '&.Mui-focused fieldset': { borderColor: 'customText.primary' },
+          '&:hover fieldset': { borderColor: 'customText.primary' }
+        },
+        '& label.Mui-focused': { color: 'customText.primary' }
+      }}
+    >
       <InputLabel id="demo-select-dark-light-mode">Mode</InputLabel>
       <Select
         labelId="demo-select-dark-light-mode"

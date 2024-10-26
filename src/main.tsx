@@ -7,16 +7,29 @@ import { store } from '@/redux/store.ts'
 import { Provider } from 'react-redux'
 import CssBaseline from '@mui/material/CssBaseline'
 import { ConfirmProvider } from 'material-ui-confirm'
+import { BrowserRouter } from 'react-router-dom'
+import { injectStore } from '@/apis/apiConfig.ts'
+
+// * Configuring the redux persist
+import { persistStore } from 'redux-persist'
+import { PersistGate } from 'redux-persist/integration/react'
+
+const persistor = persistStore(store)
+
+// * Inject store to axios
+injectStore(store)
 
 createRoot(document.getElementById('root')!).render(
-  <>
-    <CssVarsProvider theme={theme}>
-      <CssBaseline />
-      <Provider store={store}>
-        <ConfirmProvider>
-          <App />
-        </ConfirmProvider>
-      </Provider>
-    </CssVarsProvider>
-  </>
+  <BrowserRouter basename="/">
+    <Provider store={store}>
+      <PersistGate persistor={persistor} loading={null}>
+        <CssVarsProvider theme={theme}>
+          <CssBaseline />
+          <ConfirmProvider>
+            <App />
+          </ConfirmProvider>
+        </CssVarsProvider>
+      </PersistGate>
+    </Provider>
+  </BrowserRouter>
 )

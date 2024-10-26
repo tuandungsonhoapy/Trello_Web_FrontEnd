@@ -3,11 +3,12 @@ import {
   cardInterface,
   columnInterface
 } from '@/interface/board-interface'
-import { createSlice } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import type { PayloadAction } from '@reduxjs/toolkit'
 import { generatePlaceholderCard } from '@/utils/formatter'
 import { isEmpty } from 'lodash'
 import { mapOrder } from '@/utils/sort'
+import axiosInstance from '@/apis/apiConfig'
 
 export interface BoardState {
   boards: boardInterface[]
@@ -18,6 +19,14 @@ const initialState: BoardState = {
   boards: [],
   activeBoard: null
 }
+
+export const getBoardDetailsAPI = createAsyncThunk(
+  'boards/getBoardDetailsAPI',
+  async (boardId: string) => {
+    const response = await axiosInstance.get(`/boards/${boardId}`)
+    return response.data
+  }
+)
 
 const boardsSlice = createSlice({
   name: 'boards',
@@ -163,6 +172,37 @@ const boardsSlice = createSlice({
         }
       }
     }
+  },
+  extraReducers: (builder) => {
+    builder.addCase(
+      getBoardDetailsAPI.fulfilled,
+      (state, action: PayloadAction<boardInterface>) => {
+        state.activeBoard = action.payload
+
+        // * Sort column by columnOrderIds
+        state.activeBoard.columns = mapOrder(
+          state.activeBoard.columns || [],
+          state.activeBoard.columnOrderIds || [],
+          '_id'
+        )
+
+        // * Add placeholder card if column is empty
+        state.activeBoard.columns = state.activeBoard.columns?.map((column) => {
+          if (isEmpty(column.cards)) {
+            column.cards = [generatePlaceholderCard(column)]
+            column.cardOrderIds = [column.cards[0]._id]
+          } else {
+            // * Sort card by cardOrderIds
+            column.cards = mapOrder(
+              column.cards || [],
+              column.cardOrderIds || [],
+              '_id'
+            )
+          }
+          return column
+        })
+      }
+    )
   }
 })
 

@@ -18,6 +18,7 @@ import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
 import SearchIcon from '@mui/icons-material/Search'
 import OptionMenu from '@/layouts/Header/Menus'
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined'
+import { cssTextFieldCustomText } from '@/utils/constants'
 
 const Header = () => {
   const [invisible] = useState(false)
@@ -116,17 +117,8 @@ const Header = () => {
           type="text"
           sx={{
             minWidth: '150px',
-            maxWidth: '220px'
-            // '& label': { color: 'customText.primary' },
-            // '& input': { color: 'customText.primary' },
-            // '& .MuiOutlinedInput-notchedOutline': {
-            //   borderColor: 'customText.primary'
-            // },
-            // '& .MuiOutlinedInput-root': {
-            //   '&.Mui-focused fieldset': { borderColor: 'customText.primary' },
-            //   '&:hover fieldset': { borderColor: 'customText.primary' }
-            // },
-            // '& label.Mui-focused': { color: 'customText.primary' }
+            maxWidth: '220px',
+            ...cssTextFieldCustomText
           }}
           InputProps={{
             startAdornment: (

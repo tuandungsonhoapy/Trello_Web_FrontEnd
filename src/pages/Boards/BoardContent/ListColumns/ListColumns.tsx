@@ -16,6 +16,7 @@ import { toast } from 'react-toastify'
 import { createColumnAPI } from '@/apis/columnAPI'
 import { useAppSelector, useAppDispatch } from '@/hooks/reduxHooks'
 import { addNewColumn } from '@/redux/boardsSlice'
+import { cssTextFieldContrastText } from '@/utils/constants'
 
 function ListColumns({ columns }: { columns: Array<columnInterface> }) {
   const [isAddingColumn, setIsAddingColumn] = useState<boolean>(false)
@@ -139,6 +140,9 @@ function ListColumns({ columns }: { columns: Array<columnInterface> }) {
                 onChange={(e) => setColumnTitle(e.target.value)}
                 type="text"
                 inputRef={textFieldRef}
+                sx={{
+                  ...cssTextFieldContrastText
+                }}
                 autoFocus
                 error={errors.title ? true : false}
                 variant="outlined"
@@ -186,6 +190,7 @@ function ListColumns({ columns }: { columns: Array<columnInterface> }) {
                     }
                   }}
                   type="submit"
+                  className="interceptor-loading"
                 >
                   Add Column
                 </Button>

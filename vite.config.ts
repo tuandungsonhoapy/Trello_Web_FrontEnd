@@ -9,9 +9,9 @@ export default defineConfig({
   resolve: {
     alias: [{ find: '@', replacement: '/src' }]
   },
-  optimizeDeps: {
-    include: ['@emotion/react', '@emotion/styled']
-  },
+  // optimizeDeps: {
+  //   include: ['@emotion/react', '@emotion/styled']
+  // },
   server: {
     open: true,
     host: true, // Cho phép truy cập từ các thiết bị trong mạng LAN

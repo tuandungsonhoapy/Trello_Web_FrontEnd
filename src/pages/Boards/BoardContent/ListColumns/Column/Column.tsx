@@ -32,6 +32,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks'
 import { addNewCard, deleteColumn } from '@/redux/boardsSlice'
 import { useConfirm } from 'material-ui-confirm'
 import { deleteColumnAPI } from '@/apis/columnAPI'
+import { cssTextFieldContrastText } from '@/utils/constants'
 
 function Column({ column }: { column: columnInterface }) {
   const board = useAppSelector((state) => state.boards.activeBoard)
@@ -292,18 +293,7 @@ function Column({ column }: { column: columnInterface }) {
               >
                 <TextField
                   sx={{
-                    '& label': { color: 'constrastMode.main' },
-                    '& input': { color: 'constrastMode.main' },
-                    '& .MuiOutlinedInput-notchedOutline': {
-                      borderColor: 'constrastMode.main'
-                    },
-                    '& .MuiOutlinedInput-root': {
-                      '&.Mui-focused fieldset': {
-                        borderColor: 'constrastMode.main'
-                      },
-                      '&:hover fieldset': { borderColor: 'constrastMode.main' }
-                    },
-                    '& label.Mui-focused': { color: 'constrastMode.main' }
+                    ...cssTextFieldContrastText
                   }}
                   size="small"
                   label="Card Title"
@@ -354,6 +344,7 @@ function Column({ column }: { column: columnInterface }) {
                     }
                   }}
                   type="submit"
+                  className="interceptor-loading"
                 >
                   Add
                 </Button>

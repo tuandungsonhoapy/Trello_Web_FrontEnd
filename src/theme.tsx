@@ -151,15 +151,15 @@ const theme = extendTheme({
         })
       }
     },
-    MuiInputLabel: {
-      styleOverrides: {
-        // Name of the slot
-        root: ({ theme }) => ({
-          color: theme.palette.customText.primary,
-          fontSize: '0.875rem'
-        })
-      }
-    },
+    // MuiInputLabel: {
+    //   styleOverrides: {
+    //     // Name of the slot
+    //     root: ({ theme }) => ({
+    //       color: theme.palette.customText.primary,
+    //       fontSize: '0.875rem'
+    //     })
+    //   }
+    // },
     MuiOutlinedInput: {
       styleOverrides: {
         // Name of the slot
@@ -167,17 +167,17 @@ const theme = extendTheme({
           color: theme.palette.customText.primary,
           fontSize: '0.875rem',
           '& .MuiOutlinedInput-notchedOutline': {
-            borderColor: theme.palette.customText.primary
+            // borderColor: theme.palette.customText.primary
           },
           '&:hover': {
             '.MuiOutlinedInput-notchedOutline': {
-              borderColor: theme.palette.customText.primary,
+              // borderColor: theme.palette.customText.primary,
               borderWidth: '2px'
             }
           },
           '&.Mui-focused': {
             '.MuiOutlinedInput-notchedOutline': {
-              borderColor: theme.palette.customText.primary
+              // borderColor: theme.palette.customText.primary
             }
           }
         })
@@ -186,13 +186,10 @@ const theme = extendTheme({
     MuiFormLabel: {
       styleOverrides: {
         // Name of the slot
-        root: ({ theme }) => ({
-          color: theme.palette.customText.primary,
+        root: {
           fontSize: '0.875rem',
-          '&.Mui-focused': {
-            color: theme.palette.customText.primary
-          }
-        })
+          '&.Mui-focused': {}
+        }
       }
     },
     MuiTypography: {

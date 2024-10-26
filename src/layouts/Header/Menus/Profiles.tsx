@@ -10,8 +10,15 @@ import Tooltip from '@mui/material/Tooltip'
 import PersonAdd from '@mui/icons-material/PersonAdd'
 import Settings from '@mui/icons-material/Settings'
 import Logout from '@mui/icons-material/Logout'
+import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks'
+import { logoutUserAPI } from '@/redux/authSlice'
+import { useConfirm } from 'material-ui-confirm'
 
 export default function AccountMenu() {
+  const currentUser = useAppSelector((state) => state.auth.currentUser)
+  const dispatch = useAppDispatch()
+  const confirmLogout = useConfirm()
+
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const open = Boolean(anchorEl)
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -20,6 +27,34 @@ export default function AccountMenu() {
   const handleClose = () => {
     setAnchorEl(null)
   }
+
+  const handleLogout = () => {
+    confirmLogout({
+      description: 'Are you sure you want to logout?',
+      title: 'Logout',
+      confirmationText: 'Logout',
+      cancellationText: 'Cancel',
+      confirmationButtonProps: {
+        variant: 'contained',
+        color: 'error',
+        style: {
+          color: 'black'
+        }
+      },
+      cancellationButtonProps: {
+        variant: 'contained',
+        color: 'primary',
+        style: {
+          color: 'black'
+        }
+      }
+    })
+      .then(() => {
+        dispatch(logoutUserAPI())
+      })
+      .catch(() => {})
+  }
+
   return (
     <React.Fragment>
       <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>
@@ -34,7 +69,7 @@ export default function AccountMenu() {
             <Avatar
               sx={{ width: 32, height: 32 }}
               alt="tddev"
-              src="https://scontent.fsgn19-1.fna.fbcdn.net/v/t1.18169-9/25446468_736227479899200_3796786047423554044_n.jpg?_nc_cat=105&ccb=1-7&_nc_sid=1d70fc&_nc_eui2=AeGR5dA3nVLbR1sbsdhjXjtU3r_7pHAn2kfev_ukcCfaR34wBhukm6SnOb7_ozp3H4LYChDHhntauRH9HbXE-6Yc&_nc_ohc=aWKgjZWyaqAQ7kNvgGnXZvM&_nc_ht=scontent.fsgn19-1.fna&oh=00_AYBBup5JzLwmEXopmcdlMArmLpcoZa9Qsh01fM40WMI7LQ&oe=6728770E"
+              src={currentUser?.avatar || ''}
             />
           </IconButton>
         </Tooltip>
@@ -77,10 +112,7 @@ export default function AccountMenu() {
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
         <MenuItem onClick={handleClose}>
-          <Avatar /> Profile
-        </MenuItem>
-        <MenuItem onClick={handleClose}>
-          <Avatar /> My account
+          <Avatar src={currentUser?.avatar || ''} /> Profile
         </MenuItem>
         <Divider />
         <MenuItem onClick={handleClose}>
@@ -95,7 +127,7 @@ export default function AccountMenu() {
           </ListItemIcon>
           Settings
         </MenuItem>
-        <MenuItem onClick={handleClose}>
+        <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
