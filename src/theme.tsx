@@ -23,6 +23,9 @@ declare module '@mui/material/styles' {
     constrastMode: {
       main: string
     }
+    customBg: {
+      main: string
+    }
   }
 
   interface PaletteOptions {
@@ -30,6 +33,9 @@ declare module '@mui/material/styles' {
       primary?: string
     }
     constrastMode?: {
+      main?: string
+    }
+    customBg?: {
       main?: string
     }
   }
@@ -90,8 +96,8 @@ const theme = extendTheme({
         secondary: {
           main: '#ecf0f1'
         },
-        background: {
-          default: '#053bb0'
+        customBg: {
+          main: '#053bb0'
         },
         customText: {
           primary: '#ecf0f1'
@@ -106,8 +112,8 @@ const theme = extendTheme({
         secondary: {
           main: '#a156c2'
         },
-        background: {
-          default: '#1e272e'
+        customBg: {
+          main: '#1e272e'
         },
         customText: {
           primary: '#a156c2'

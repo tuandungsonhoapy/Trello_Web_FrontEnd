@@ -27,6 +27,22 @@ export const logoutUserAPI = createAsyncThunk(
   }
 )
 
+export const updateUserAPI = createAsyncThunk(
+  'auth/updateUserAPI',
+  async (
+    data:
+      | {
+          current_password?: string
+          new_password?: string
+          displayName?: string
+        }
+      | FormData
+  ) => {
+    const response = await axiosInstance.put('/users/update', data)
+    return response.data
+  }
+)
+
 const AuthSlice = createSlice({
   name: 'auth',
   initialState,
@@ -45,6 +61,12 @@ const AuthSlice = createSlice({
           if (action.payload.loggedOut) {
             state.currentUser = null
           }
+        }
+      )
+      .addCase(
+        updateUserAPI.fulfilled,
+        (state, action: PayloadAction<userInterface>) => {
+          state.currentUser = { ...state.currentUser, ...action.payload }
         }
       )
   }

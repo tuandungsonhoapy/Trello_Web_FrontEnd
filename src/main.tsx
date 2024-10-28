@@ -6,6 +6,7 @@ import 'react-toastify/dist/ReactToastify.css'
 import { store } from '@/redux/store.ts'
 import { Provider } from 'react-redux'
 import CssBaseline from '@mui/material/CssBaseline'
+import { GlobalStyles } from '@mui/material'
 import { ConfirmProvider } from 'material-ui-confirm'
 import { BrowserRouter } from 'react-router-dom'
 import { injectStore } from '@/apis/apiConfig.ts'
@@ -24,6 +25,7 @@ createRoot(document.getElementById('root')!).render(
     <Provider store={store}>
       <PersistGate persistor={persistor} loading={null}>
         <CssVarsProvider theme={theme}>
+          <GlobalStyles styles={{ a: { textDecoration: 'none' } }} />
           <CssBaseline />
           <ConfirmProvider>
             <App />

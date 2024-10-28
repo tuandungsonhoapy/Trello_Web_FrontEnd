@@ -13,6 +13,7 @@ import Logout from '@mui/icons-material/Logout'
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks'
 import { logoutUserAPI } from '@/redux/authSlice'
 import { useConfirm } from 'material-ui-confirm'
+import { Link } from 'react-router-dom'
 
 export default function AccountMenu() {
   const currentUser = useAppSelector((state) => state.auth.currentUser)
@@ -111,9 +112,11 @@ export default function AccountMenu() {
         transformOrigin={{ horizontal: 'right', vertical: 'top' }}
         anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
       >
-        <MenuItem onClick={handleClose}>
-          <Avatar src={currentUser?.avatar || ''} /> Profile
-        </MenuItem>
+        <Link to={'/settings/account'} style={{ color: 'inherit' }}>
+          <MenuItem onClick={handleClose}>
+            <Avatar src={currentUser?.avatar || ''} /> Profile
+          </MenuItem>
+        </Link>
         <Divider />
         <MenuItem onClick={handleClose}>
           <ListItemIcon>

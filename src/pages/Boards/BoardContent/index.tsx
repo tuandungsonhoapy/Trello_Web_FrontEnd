@@ -129,8 +129,8 @@ function BoardContent({ board }: { board: boardInterface | null }) {
             overCardIndex >= 0
               ? overCardIndex + modifier
               : overColumn?.cards
-                ? overColumn.cards.length + 1
-                : 0
+              ? overColumn.cards.length + 1
+              : 0
 
         const newColumns = cloneDeep(prev)
         const newActiveColumn = newColumns.find(
@@ -424,7 +424,7 @@ function BoardContent({ board }: { board: boardInterface | null }) {
           display: 'flex',
           height: (theme) => theme.trelloCustom.boardContentHeight,
           width: '100%',
-          bgcolor: (theme) => theme.palette.background.default,
+          bgcolor: (theme) => theme.palette.customBg.main,
           p: '6px 0'
         }}
       >
@@ -433,12 +433,12 @@ function BoardContent({ board }: { board: boardInterface | null }) {
           {(!activeDragItemId || !activeDragItemType) && null}
           {activeDragItemId &&
             activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && (
-            <Column column={activeDragItemData} />
-          )}
+              <Column column={activeDragItemData} />
+            )}
           {activeDragItemId &&
             activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD && (
-            <Card card={activeDragItemData} />
-          )}
+              <Card card={activeDragItemData} />
+            )}
         </DragOverlay>
       </Box>
     </DndContext>

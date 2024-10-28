@@ -39,7 +39,7 @@ const BoardBar = ({ board }: { board: boardInterface | null }) => {
         px: 2,
         gap: 2,
         overflowX: 'auto',
-        bgcolor: (theme) => theme.palette.background.default
+        bgcolor: (theme) => theme.palette.customBg.main
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>

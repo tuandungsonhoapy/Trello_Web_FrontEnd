@@ -38,7 +38,7 @@ function LoginForm() {
 
   const handleLogin = (data: LoginSchemaType) => {
     toast
-      .promise(dispatch(loginUserAPI(data)).unwrap, {
+      .promise(dispatch(loginUserAPI(data)).unwrap(), {
         pending: 'Logging in...',
         success: 'Login successfully!',
         error: 'Login failed!'

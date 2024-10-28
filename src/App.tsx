@@ -9,6 +9,7 @@ import Auth from '@/pages/Auth/Auth'
 import AccountVerification from '@/pages/Auth/AccountVerification'
 import { userInterface } from '@/interface/user-interface'
 import { useAppSelector } from '@/hooks/reduxHooks'
+import Settings from '@/pages/Settings/Settings'
 
 const ProtectedRoute = ({ user }: { user: userInterface | null }) => {
   if (!user) {
@@ -37,6 +38,22 @@ function App() {
             element={
               <Layout>
                 <Board />
+              </Layout>
+            }
+          />
+          <Route
+            path="/settings/account"
+            element={
+              <Layout>
+                <Settings />
+              </Layout>
+            }
+          />
+          <Route
+            path="/settings/security"
+            element={
+              <Layout>
+                <Settings />
               </Layout>
             }
           />

@@ -19,6 +19,7 @@ import SearchIcon from '@mui/icons-material/Search'
 import OptionMenu from '@/layouts/Header/Menus'
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined'
 import { cssTextFieldCustomText } from '@/utils/constants'
+import { Link } from 'react-router-dom'
 
 const Header = () => {
   const [invisible] = useState(false)
@@ -43,23 +44,25 @@ const Header = () => {
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
         <AppsIcon sx={{ color: 'customText.primary' }} />
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-          <SvgIcon
-            component={TrelloIcon}
-            inheritViewBox
-            fontSize="small"
-            sx={{ color: 'customText.primary' }}
-          />
-          <Typography
-            sx={{
-              fontWeight: 'bold',
-              fontSize: '1.25rem',
-              color: 'customText.primary'
-            }}
-          >
-            Trello
-          </Typography>
-        </Box>
+        <Link to={'/'}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <SvgIcon
+              component={TrelloIcon}
+              inheritViewBox
+              fontSize="small"
+              sx={{ color: 'customText.primary' }}
+            />
+            <Typography
+              sx={{
+                fontWeight: 'bold',
+                fontSize: '1.25rem',
+                color: 'customText.primary'
+              }}
+            >
+              Trello
+            </Typography>
+          </Box>
+        </Link>
         <Box
           sx={{
             display: {

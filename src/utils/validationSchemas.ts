@@ -56,3 +56,31 @@ export const registerSchema = z
   })
 
 export type RegisterSchemaType = z.infer<typeof registerSchema>
+
+export const securitySchema = z
+  .object({
+    current_password: z
+      .string()
+      .min(6, 'Current password must be at least 6 characters!')
+      .trim(),
+    new_password: z
+      .string()
+      .min(6, 'New password must be at least 6 characters!')
+      .trim(),
+    new_password_confirmation: z
+      .string()
+      .min(6, 'New confirm password must be at least 6 characters!')
+      .trim()
+  })
+  .strict()
+  .superRefine((data, ctx) => {
+    if (data.new_password !== data.new_password_confirmation) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: 'New password and new confirm password must be match!',
+        path: ['new_password_confirmation']
+      })
+    }
+  })
+
+export type SecuritySchemaType = z.infer<typeof securitySchema>
