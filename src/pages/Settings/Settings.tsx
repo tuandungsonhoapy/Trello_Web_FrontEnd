@@ -26,7 +26,7 @@ function Settings() {
   const [activeTab, setActiveTab] = useState(getDefaultTab())
 
   const handleChangeTab = (
-    event: React.SyntheticEvent,
+    _event: React.SyntheticEvent,
     selectedTab: string
   ) => {
     setActiveTab(selectedTab)

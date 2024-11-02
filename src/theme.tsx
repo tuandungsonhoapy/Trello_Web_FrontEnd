@@ -169,8 +169,8 @@ const theme = extendTheme({
     MuiOutlinedInput: {
       styleOverrides: {
         // Name of the slot
-        root: ({ theme }) => ({
-          color: theme.palette.customText.primary,
+        root: () => ({
+          // color: theme.palette.customText.primary,
           fontSize: '0.875rem',
           '& .MuiOutlinedInput-notchedOutline': {
             // borderColor: theme.palette.customText.primary

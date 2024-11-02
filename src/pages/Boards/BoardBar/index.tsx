@@ -6,11 +6,10 @@ import { styled } from '@mui/material'
 import AddToDriveIcon from '@mui/icons-material/AddToDrive'
 import AutoModeIcon from '@mui/icons-material/AutoMode'
 import FilterListIcon from '@mui/icons-material/FilterList'
-import AccountGroup from '@/pages/Boards/BoardBar/AccountGroup'
-import Button from '@mui/material/Button'
-import PersonAddIcon from '@mui/icons-material/PersonAdd'
 import { boardInterface } from '@/interface/board-interface'
 import { capitalizeFirstLetter } from '@/utils/formatter'
+import BoardUserGroup from '@/pages/Boards/BoardBar/BoardUserGroup'
+import InviteBoardUser from '@/pages/Boards/BoardBar/InviteBoardUser'
 
 const StyledChip = styled(Chip)(({ theme }) => ({
   color: theme.palette.customText.primary,
@@ -58,10 +57,8 @@ const BoardBar = ({ board }: { board: boardInterface | null }) => {
         <StyledChip icon={<FilterListIcon />} label="Filters" clickable />
       </Box>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-        <Button startIcon={<PersonAddIcon />} variant="outlined">
-          Invite
-        </Button>
-        <AccountGroup />
+        <InviteBoardUser boardId={board?._id} />
+        <BoardUserGroup boardUsers={board?.FE_allUsers || []} />
       </Box>
     </Box>
   )

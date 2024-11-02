@@ -6,6 +6,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks'
 import { getBoardDetailsAPI } from '@/redux/boardsSlice'
 import { useParams } from 'react-router-dom'
 import LoadingSpinner from '@/components/Loading/LoadingSpinner'
+import ActiveCard from '@/components/Modal/ActiveCard/ActiveCard'
 
 function Board() {
   const board = useAppSelector((state) => state.boards.activeBoard)
@@ -30,6 +31,7 @@ function Board() {
     <>
       {board && (
         <>
+          <ActiveCard />
           <BoardBar board={board} />
           <BoardContent board={board} />
         </>

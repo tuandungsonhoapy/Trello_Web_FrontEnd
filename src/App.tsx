@@ -10,6 +10,7 @@ import AccountVerification from '@/pages/Auth/AccountVerification'
 import { userInterface } from '@/interface/user-interface'
 import { useAppSelector } from '@/hooks/reduxHooks'
 import Settings from '@/pages/Settings/Settings'
+import Boards from '@/pages/Boards'
 
 const ProtectedRoute = ({ user }: { user: userInterface | null }) => {
   if (!user) {
@@ -25,12 +26,7 @@ function App() {
   return (
     <>
       <Routes>
-        <Route
-          path="/"
-          element={
-            <Navigate to={'/boards/67132df2f05aebf2893b58ba'} replace={true} />
-          }
-        />
+        <Route path="/" element={<Navigate to={'/boards'} replace={true} />} />
 
         <Route element={<ProtectedRoute user={currentUser} />}>
           <Route
@@ -41,6 +37,7 @@ function App() {
               </Layout>
             }
           />
+          <Route path="/boards" element={<Boards />} />
           <Route
             path="/settings/account"
             element={

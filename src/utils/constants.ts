@@ -37,3 +37,11 @@ export const cssTextFieldContrastText = {
   },
   '& label.Mui-focused': { color: 'constrastMode.main' }
 }
+
+export const BOARD_TYPES = {
+  PUBLIC: 'public',
+  PRIVATE: 'private'
+}
+
+export const DEFAULT_PAGE = 1
+export const DEFAULT_LIMIT_PER_PAGE = 12

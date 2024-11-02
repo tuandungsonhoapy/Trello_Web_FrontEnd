@@ -179,6 +179,13 @@ const boardsSlice = createSlice({
       (state, action: PayloadAction<boardInterface>) => {
         state.activeBoard = action.payload
 
+        if (!state.activeBoard.owners) state.activeBoard.owners = []
+        if (!state.activeBoard.members) state.activeBoard.members = []
+
+        state.activeBoard.FE_allUsers = state.activeBoard.owners.concat(
+          state.activeBoard.members
+        )
+
         // * Sort column by columnOrderIds
         state.activeBoard.columns = mapOrder(
           state.activeBoard.columns || [],

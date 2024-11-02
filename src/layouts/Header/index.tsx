@@ -8,8 +8,7 @@ import Workspaces from '@/layouts/Header/Menus/Workspaces'
 import Recent from '@/layouts/Header/Menus/Recent'
 import Starred from '@/layouts/Header/Menus/Starred'
 import Templates from '@/layouts/Header/Menus/Templates'
-import { Badge, Button, InputAdornment, TextField } from '@mui/material'
-import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
+import { Button, InputAdornment, TextField } from '@mui/material'
 import { useState } from 'react'
 import Tooltip from '@mui/material/Tooltip'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
@@ -20,10 +19,12 @@ import OptionMenu from '@/layouts/Header/Menus'
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined'
 import { cssTextFieldCustomText } from '@/utils/constants'
 import { Link } from 'react-router-dom'
+import { useAppSelector } from '@/hooks/reduxHooks'
+import Notifications from '@/layouts/Header/Notifications/Notifications'
 
 const Header = () => {
-  const [invisible] = useState(false)
   const [searchValue, setSearchValue] = useState('')
+  const activeBoard = useAppSelector((state) => state.boards.activeBoard)
 
   return (
     <Box
@@ -43,25 +44,31 @@ const Header = () => {
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-        <AppsIcon sx={{ color: 'customText.primary' }} />
-        <Link to={'/'}>
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-            <SvgIcon
-              component={TrelloIcon}
-              inheritViewBox
-              fontSize="small"
-              sx={{ color: 'customText.primary' }}
-            />
-            <Typography
-              sx={{
-                fontWeight: 'bold',
-                fontSize: '1.25rem',
-                color: 'customText.primary'
-              }}
-            >
-              Trello
-            </Typography>
-          </Box>
+        <Link to={'/boards'} style={{ display: 'flex', alignItems: 'center' }}>
+          <Tooltip title="Boards List">
+            <AppsIcon sx={{ color: 'customText.primary' }} />
+          </Tooltip>
+        </Link>
+        <Link to={`/boards/${activeBoard?._id ? activeBoard._id : ''}`}>
+          <Tooltip title="The board was just accessed">
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+              <SvgIcon
+                component={TrelloIcon}
+                inheritViewBox
+                fontSize="small"
+                sx={{ color: 'customText.primary' }}
+              />
+              <Typography
+                sx={{
+                  fontWeight: 'bold',
+                  fontSize: '1.25rem',
+                  color: 'customText.primary'
+                }}
+              >
+                Trello
+              </Typography>
+            </Box>
+          </Tooltip>
         </Link>
         <Box
           sx={{
@@ -144,16 +151,9 @@ const Header = () => {
           }}
         />
         <ModeToggle />
-        <Tooltip title="Notifications">
-          <Badge
-            color="error"
-            variant="dot"
-            invisible={invisible}
-            sx={{ cursor: 'pointer' }}
-          >
-            <NotificationsNoneIcon sx={{ color: 'customText.primary' }} />
-          </Badge>
-        </Tooltip>
+
+        <Notifications />
+
         <Tooltip title="Help">
           <HelpOutlineIcon
             sx={{ cursor: 'pointer', color: 'customText.primary' }}

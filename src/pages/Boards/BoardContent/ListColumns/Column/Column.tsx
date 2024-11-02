@@ -2,7 +2,6 @@ import Divider from '@mui/material/Divider'
 import MenuItem from '@mui/material/MenuItem'
 import ListItemText from '@mui/material/ListItemText'
 import ListItemIcon from '@mui/material/ListItemIcon'
-import Typography from '@mui/material/Typography'
 import ContentCut from '@mui/icons-material/ContentCut'
 import Cloud from '@mui/icons-material/Cloud'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
@@ -29,10 +28,11 @@ import { InputAdornment, TextField } from '@mui/material'
 import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined'
 import { createCardAPI } from '@/apis/cardAPI'
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks'
-import { addNewCard, deleteColumn } from '@/redux/boardsSlice'
+import { addNewCard, deleteColumn, updateColumn } from '@/redux/boardsSlice'
 import { useConfirm } from 'material-ui-confirm'
-import { deleteColumnAPI } from '@/apis/columnAPI'
+import { deleteColumnAPI, updateColumnAPI } from '@/apis/columnAPI'
 import { cssTextFieldContrastText } from '@/utils/constants'
+import ToggleFocusInput from '@/components/Form/ToggleFocusInput'
 
 function Column({ column }: { column: columnInterface }) {
   const board = useAppSelector((state) => state.boards.activeBoard)
@@ -78,9 +78,8 @@ function Column({ column }: { column: columnInterface }) {
           dispatch(addNewCard(data))
           toast.success('Card created successfully')
         })
-        .catch((error) => {
+        .catch(() => {
           toast.error('Card not created')
-          console.log('error-create-card', error)
         })
     } else toast.error('Board not found')
 
@@ -142,6 +141,15 @@ function Column({ column }: { column: columnInterface }) {
       })
   }
 
+  const handleChangedColumnTitle = (value: string) => {
+    updateColumnAPI(column._id, { title: value } as columnInterface).then(
+      (res) => {
+        toast.success('Column title updated successfully')
+        dispatch(updateColumn(res as columnInterface))
+      }
+    )
+  }
+
   return (
     <div ref={setNodeRef} {...attributes} style={dndKitStyles}>
       <Box
@@ -170,16 +178,11 @@ function Column({ column }: { column: columnInterface }) {
             justifyContent: 'space-between'
           }}
         >
-          <Typography
-            variant="h6"
-            sx={{
-              fontSize: '1rem',
-              fontWeight: 'bold',
-              cursor: 'pointer'
-            }}
-          >
-            {column?.title}
-          </Typography>
+          <ToggleFocusInput
+            data-no-dnd="true"
+            value={column?.title || ''}
+            onChangedValue={handleChangedColumnTitle}
+          />
           <Box>
             <Tooltip title={'more options'}>
               <ExpandMoreIcon

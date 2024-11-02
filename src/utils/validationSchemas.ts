@@ -84,3 +84,17 @@ export const securitySchema = z
   })
 
 export type SecuritySchemaType = z.infer<typeof securitySchema>
+
+export const boardSchema = z
+  .object({
+    title: z
+      .string()
+      .min(3, 'Title is required and at least 3 characters!')
+      .max(100)
+      .trim(),
+    description: z.string().max(255).optional(),
+    type: z.enum(['public', 'private'])
+  })
+  .strict()
+
+export type BoardSchemaType = z.infer<typeof boardSchema>

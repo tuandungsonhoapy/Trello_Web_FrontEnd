@@ -6,7 +6,7 @@ export const createColumnAPI = async (data: {
   title: string
 }) => {
   const response = await axiosInstance.post('/columns', data)
-  console.log('response createColumnAPI', response)
+
   return response.data
 }
 
@@ -14,14 +14,13 @@ export const updateColumnAPI = async (
   columnId: string,
   data: columnInterface
 ) => {
-  console.log('data-updateColumnAPI', data)
   const response = await axiosInstance.put(`/columns/${columnId}`, data)
-  console.log('response updateColumnAPI', response)
+
   return response.data
 }
 
 export const deleteColumnAPI = async (columnId: string) => {
   const response = await axiosInstance.delete(`/columns/${columnId}`)
-  console.log('response deleteColumnAPI', response)
+
   return response.data
 }

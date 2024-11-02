@@ -21,9 +21,9 @@ const persistor = persistStore(store)
 injectStore(store)
 
 createRoot(document.getElementById('root')!).render(
-  <BrowserRouter basename="/">
-    <Provider store={store}>
-      <PersistGate persistor={persistor} loading={null}>
+  <Provider store={store}>
+    <PersistGate persistor={persistor} loading={null}>
+      <BrowserRouter basename="/">
         <CssVarsProvider theme={theme}>
           <GlobalStyles styles={{ a: { textDecoration: 'none' } }} />
           <CssBaseline />
@@ -31,7 +31,7 @@ createRoot(document.getElementById('root')!).render(
             <App />
           </ConfirmProvider>
         </CssVarsProvider>
-      </PersistGate>
-    </Provider>
-  </BrowserRouter>
+      </BrowserRouter>
+    </PersistGate>
+  </Provider>
 )

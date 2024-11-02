@@ -27,7 +27,8 @@ export default function ModeToggle() {
         },
         '& .MuiOutlinedInput-root': {
           '&.Mui-focused fieldset': { borderColor: 'customText.primary' },
-          '&:hover fieldset': { borderColor: 'customText.primary' }
+          '&:hover fieldset': { borderColor: 'customText.primary' },
+          color: 'customText.primary'
         },
         '& label.Mui-focused': { color: 'customText.primary' }
       }}
