@@ -9,6 +9,8 @@ const AccountVerification = () => {
 
   const { email, token } = Object.fromEntries([...searchParams])
 
+  console.log(email, token)
+
   useEffect(() => {
     if (email && token) {
       verifyUserAPI({ email, token })
@@ -18,7 +20,7 @@ const AccountVerification = () => {
   }, [email, token])
 
   if (!email || !token) {
-    return <Navigate to="404" />
+    return <Navigate to="/404" />
   }
 
   // * Call API to verify account
