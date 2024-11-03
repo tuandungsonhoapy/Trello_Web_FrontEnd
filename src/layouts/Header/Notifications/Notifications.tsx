@@ -15,9 +15,13 @@ import DoneIcon from '@mui/icons-material/Done'
 import NotInterestedIcon from '@mui/icons-material/NotInterested'
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks'
 import {
+  addNotification,
   fetchInvitationsAPI,
   updateBoardInvitationAPI
 } from '@/redux/notificationsSlice'
+import { socketIoInstance } from '@/socket'
+import { invitationInterface } from '@/interface/invitation-interface'
+import { useNavigate } from 'react-router-dom'
 
 const BOARD_INVITATION_STATUS = {
   PENDING: 'PENDING',
@@ -28,35 +32,63 @@ const BOARD_INVITATION_STATUS = {
 function Notifications() {
   const [anchorEl, setAnchorEl] = useState(null)
   const open = Boolean(anchorEl)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleClickNotificationIcon = (event: any) => {
     setAnchorEl(event.currentTarget)
+
+    setOpenNotification(false)
   }
   const handleClose = () => {
     setAnchorEl(null)
   }
 
+  const navigate = useNavigate()
+
+  const [openNotification, setOpenNotification] = useState(false)
+
   const notifications = useAppSelector(
     (state) => state.notifications.notifications
   )
+  const user = useAppSelector((state) => state.auth.currentUser)
   const dispatch = useAppDispatch()
 
   const updateBoardInvitation = (status: string, invitationId: string) => {
     dispatch(updateBoardInvitationAPI({ status, invitationId })).then((res) => {
-      console.log('🚀 ~ updateBoardInvitation ~ res:', res)
+      if (
+        res.payload.boardInvitation.status === BOARD_INVITATION_STATUS.ACCEPTED
+      ) {
+        navigate(`/boards/${res.payload.boardInvitation.boardId}`)
+      }
     })
   }
 
   useEffect(() => {
     dispatch(fetchInvitationsAPI())
-  }, [dispatch])
+
+    // Create function to handle when receive a event real-time
+    const handleReceiveInvitation = (invitation: invitationInterface) => {
+      if (invitation.inviteeId === user?._id) {
+        // Add new notification to redux store
+        dispatch(addNotification(invitation))
+
+        // Show notification
+        setOpenNotification(true)
+      }
+    }
+
+    socketIoInstance.on('be-invite-user-to-board', handleReceiveInvitation)
+
+    return () => {
+      socketIoInstance.off('be-invite-user-to-board', handleReceiveInvitation)
+    }
+  }, [dispatch, user?._id])
 
   return (
     <Box>
       <Tooltip title="Notifications">
         <Badge
           color="warning"
-          // variant="none"
-          variant="dot"
+          variant={openNotification ? 'dot' : 'standard'}
           sx={{ cursor: 'pointer' }}
           id="basic-button-open-notification"
           aria-controls={open ? 'basic-notification-drop-down' : undefined}
@@ -66,8 +98,7 @@ function Notifications() {
         >
           <NotificationsNoneIcon
             sx={{
-              // color: 'white'
-              color: 'yellow'
+              color: openNotification ? 'green' : 'customText.primary'
             }}
           />
         </Badge>
@@ -120,75 +151,75 @@ function Notifications() {
                 {/* Khi Status của thông báo này là PENDING thì sẽ hiện 2 Button */}
                 {notification.boardInvitation?.status ===
                 BOARD_INVITATION_STATUS.PENDING ? (
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 1,
-                      justifyContent: 'flex-end'
-                    }}
-                  >
-                    <Button
-                      className="interceptor-loading"
-                      type="submit"
-                      variant="contained"
-                      color="success"
-                      sx={{ color: 'white' }}
-                      size="small"
-                      onClick={() =>
-                        updateBoardInvitation(
-                          BOARD_INVITATION_STATUS.ACCEPTED,
-                          notification._id
-                        )
-                      }
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1,
+                        justifyContent: 'flex-end'
+                      }}
                     >
-                      Accept
-                    </Button>
-                    <Button
-                      className="interceptor-loading"
-                      type="submit"
-                      variant="contained"
-                      color="error"
-                      sx={{ color: 'white' }}
-                      size="small"
-                      onClick={() =>
-                        updateBoardInvitation(
-                          BOARD_INVITATION_STATUS.REJECTED,
-                          notification._id
-                        )
-                      }
-                    >
-                      Reject
-                    </Button>
-                  </Box>
-                ) : (
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 1,
-                      justifyContent: 'flex-end'
-                    }}
-                  >
-                    {notification.boardInvitation?.status ===
-                      BOARD_INVITATION_STATUS.ACCEPTED && (
-                      <Chip
-                        icon={<DoneIcon />}
-                        label="Accepted"
+                      <Button
+                        className="interceptor-loading"
+                        type="submit"
+                        variant="contained"
                         color="success"
+                        sx={{ color: 'white' }}
                         size="small"
-                      />
-                    )}
-                    {notification.boardInvitation?.status ===
+                        onClick={() =>
+                          updateBoardInvitation(
+                            BOARD_INVITATION_STATUS.ACCEPTED,
+                            notification._id
+                          )
+                        }
+                      >
+                      Accept
+                      </Button>
+                      <Button
+                        className="interceptor-loading"
+                        type="submit"
+                        variant="contained"
+                        color="error"
+                        sx={{ color: 'white' }}
+                        size="small"
+                        onClick={() =>
+                          updateBoardInvitation(
+                            BOARD_INVITATION_STATUS.REJECTED,
+                            notification._id
+                          )
+                        }
+                      >
+                      Reject
+                      </Button>
+                    </Box>
+                  ) : (
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1,
+                        justifyContent: 'flex-end'
+                      }}
+                    >
+                      {notification.boardInvitation?.status ===
+                      BOARD_INVITATION_STATUS.ACCEPTED && (
+                        <Chip
+                          icon={<DoneIcon />}
+                          label="Accepted"
+                          color="success"
+                          size="small"
+                        />
+                      )}
+                      {notification.boardInvitation?.status ===
                       BOARD_INVITATION_STATUS.REJECTED && (
-                      <Chip
-                        icon={<NotInterestedIcon />}
-                        label="Rejected"
-                        size="small"
-                      />
-                    )}
-                  </Box>
-                )}
+                        <Chip
+                          icon={<NotInterestedIcon />}
+                          label="Rejected"
+                          size="small"
+                        />
+                      )}
+                    </Box>
+                  )}
 
                 {/* Thời gian của thông báo */}
                 <Box sx={{ textAlign: 'right' }}>

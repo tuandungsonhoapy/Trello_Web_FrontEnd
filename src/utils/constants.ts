@@ -45,3 +45,8 @@ export const BOARD_TYPES = {
 
 export const DEFAULT_PAGE = 1
 export const DEFAULT_LIMIT_PER_PAGE = 12
+
+export const CARD_MEMBER_ACTIONS = {
+  ADD: 'ADD',
+  REMOVE: 'REMOVE'
+}

@@ -22,6 +22,7 @@ const HiddenInputStyles = styled('input')({
   // width: 1
 })
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function VisuallyHiddenInput(props: any) {
   return <HiddenInputStyles {...props} />
 }

@@ -15,8 +15,6 @@ function Board() {
 
   const dispatch = useAppDispatch()
 
-  console.log('Board Content re-rendered: ', board)
-
   useEffect(() => {
     if (boardId) {
       dispatch(getBoardDetailsAPI(boardId))

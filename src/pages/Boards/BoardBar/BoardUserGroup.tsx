@@ -18,6 +18,7 @@ function BoardUserGroup({
   const [anchorPopoverElement, setAnchorPopoverElement] = useState(null)
   const isOpenPopover = Boolean(anchorPopoverElement)
   const popoverId = isOpenPopover ? 'board-all-users-popover' : undefined
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const handleTogglePopover = (event: any) => {
     if (!anchorPopoverElement && event)
       setAnchorPopoverElement(event.currentTarget)

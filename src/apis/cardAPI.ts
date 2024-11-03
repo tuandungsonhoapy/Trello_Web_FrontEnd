@@ -1,4 +1,5 @@
 import axiosInstance from '@/apis/apiConfig'
+import { incomingMemberInterface } from '@/components/Modal/ActiveCard/ActiveCard'
 import { cardInterface } from '@/interface/board-interface'
 
 export const createCardAPI = async (data: {
@@ -13,7 +14,7 @@ export const createCardAPI = async (data: {
 
 export const updateCardAPI = async (
   cardId: string,
-  data: cardInterface | FormData
+  data: cardInterface | FormData | incomingMemberInterface
 ) => {
   const response = await axiosInstance.put(`/cards/${cardId}`, data)
 

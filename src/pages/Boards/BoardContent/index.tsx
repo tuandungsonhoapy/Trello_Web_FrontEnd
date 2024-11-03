@@ -50,6 +50,7 @@ function BoardContent({ board }: { board: boardInterface | null }) {
   const [activeDragItemId, setActiveDragItemId] = useState<
     string | number | null
   >(null)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [activeDragItemData, setActiveDragItemData] = useState<any>(null)
   const [oldColumn, setOldColumn] = useState<columnInterface | null>(null)
 
@@ -129,8 +130,8 @@ function BoardContent({ board }: { board: boardInterface | null }) {
             overCardIndex >= 0
               ? overCardIndex + modifier
               : overColumn?.cards
-              ? overColumn.cards.length + 1
-              : 0
+                ? overColumn.cards.length + 1
+                : 0
 
         const newColumns = cloneDeep(prev)
         const newActiveColumn = newColumns.find(
@@ -433,12 +434,12 @@ function BoardContent({ board }: { board: boardInterface | null }) {
           {(!activeDragItemId || !activeDragItemType) && null}
           {activeDragItemId &&
             activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && (
-              <Column column={activeDragItemData} />
-            )}
+            <Column column={activeDragItemData} />
+          )}
           {activeDragItemId &&
             activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD && (
-              <Card card={activeDragItemData} />
-            )}
+            <Card card={activeDragItemData} />
+          )}
         </DragOverlay>
       </Box>
     </DndContext>

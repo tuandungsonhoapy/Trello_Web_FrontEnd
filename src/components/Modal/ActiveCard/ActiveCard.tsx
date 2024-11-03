@@ -39,6 +39,7 @@ import { updateCardAPI } from '@/apis/cardAPI'
 import { cardInterface } from '@/interface/board-interface'
 import { updateCard } from '@/redux/boardsSlice'
 import { commnetInterface } from '@/interface/comment-interface'
+import { CARD_MEMBER_ACTIONS } from '@/utils/constants'
 
 const SidebarItem = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -64,14 +65,22 @@ const SidebarItem = styled(Box)(({ theme }) => ({
 /**
  * Note: Modal là một low-component mà bọn MUI sử dụng bên trong những thứ như Dialog, Drawer, Menu, Popover. Ở đây dĩ nhiên chúng ta có thể sử dụng Dialog cũng không thành vấn đề gì, nhưng sẽ sử dụng Modal để dễ linh hoạt tùy biến giao diện từ con số 0 cho phù hợp với mọi nhu cầu nhé.
  */
+export interface incomingMemberInterface {
+  incomingMember: { userId: string; action: string }
+}
+
 function ActiveCard() {
   const { activeCard, isShowActiveCard } = useAppSelector(
     (state) => state.activeCard
   )
 
+  const user = useAppSelector((state) => state.auth.currentUser)
+
   const dispatch = useAppDispatch()
 
-  const callApiUpdateCard = async (data: cardInterface | FormData) => {
+  const callApiUpdateCard = async (
+    data: cardInterface | FormData | incomingMemberInterface
+  ) => {
     if (!activeCard?._id) return
 
     const cardResponse = await updateCardAPI(activeCard?._id, data)
@@ -125,6 +134,10 @@ function ActiveCard() {
 
   const onAddCardComment = async (comment: commnetInterface) => {
     await callApiUpdateCard({ comments: [comment] } as cardInterface)
+  }
+
+  const onUpdateCardMember = (data: { userId: string; action: string }) => {
+    callApiUpdateCard({ incomingMember: data } as incomingMemberInterface)
   }
 
   return (
@@ -211,7 +224,10 @@ function ActiveCard() {
               </Typography>
 
               {/* Feature 02: Xử lý các thành viên của Card */}
-              <CardUserGroup />
+              <CardUserGroup
+                cardMemberIds={activeCard?.memberIds || []}
+                onUpdateCardMember={onUpdateCardMember}
+              />
             </Box>
 
             <Box sx={{ mb: 3 }}>
@@ -260,10 +276,21 @@ function ActiveCard() {
             </Typography>
             <Stack direction="column" spacing={1}>
               {/* Feature 05: Xử lý hành động bản thân user tự join vào card */}
-              <SidebarItem className="active">
-                <PersonOutlineOutlinedIcon fontSize="small" />
-                Join
-              </SidebarItem>
+              {!activeCard?.memberIds?.includes(user?._id || '') && (
+                <SidebarItem
+                  onClick={() =>
+                    onUpdateCardMember({
+                      userId: user?._id || '',
+                      action: CARD_MEMBER_ACTIONS.ADD
+                    })
+                  }
+                  className="active"
+                >
+                  <PersonOutlineOutlinedIcon fontSize="small" />
+                  Join
+                </SidebarItem>
+              )}
+
               {/* Feature 06: Xử lý hành động cập nhật ảnh Cover của Card */}
               <SidebarItem className="active" component="label">
                 <ImageOutlinedIcon fontSize="small" />

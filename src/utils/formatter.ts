@@ -21,7 +21,6 @@ export const interceptorLoadingElements = (calling: boolean) => {
   const elements = document.querySelectorAll('.interceptor-loading')
   for (let i = 0; i < elements.length; i++) {
     if (calling) {
-      console.log('calling')
       // Nếu đang trong thời gian chờ gọi API (calling === true) thì sẽ làm mờ phần tử và chặn click bằng css pointer-events
       ;(elements[i] as HTMLElement).style.opacity = '0.5'
       ;(elements[i] as HTMLElement).style.pointerEvents = 'none'

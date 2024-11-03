@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export function mapOrder<T extends { [key: string]: any }>(
   array: T[],
   order: string[],

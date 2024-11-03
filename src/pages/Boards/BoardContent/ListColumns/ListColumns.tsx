@@ -43,9 +43,8 @@ function ListColumns({ columns }: { columns: Array<columnInterface> }) {
           dispatch(addNewColumn(data as columnInterface))
           toast.success('Column created successfully')
         })
-        .catch((error) => {
+        .catch(() => {
           toast.error('Column not created')
-          console.log('error-after-createColumn', error)
         })
     } else {
       toast.error('Board not found')

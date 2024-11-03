@@ -15,6 +15,7 @@ import {
 import FieldErrorAlert from '@/components/Form/FieldErrorAlert'
 import { inviteUserToBoardAPI } from '@/apis/invitationAPI'
 import { toast } from 'react-toastify'
+import { socketIoInstance } from '@/socket'
 
 function InviteBoardUser({ boardId }: { boardId: string | undefined }) {
   /**
@@ -37,16 +38,19 @@ function InviteBoardUser({ boardId }: { boardId: string | undefined }) {
     setValue,
     formState: { errors }
   } = useForm<{ inviteeEmail: string | null }>()
+
   const submitInviteUserToBoard = (data: { inviteeEmail: string | null }) => {
     const { inviteeEmail } = data
-    console.log('inviteeEmail:', inviteeEmail)
     if (!inviteeEmail) return
     if (!boardId) return
-    inviteUserToBoardAPI({ boardId, inviteeEmail }).then(() => {
+    inviteUserToBoardAPI({ boardId, inviteeEmail }).then((invitation) => {
       // Clear thẻ input sử dụng react-hook-form bằng setValue
       setValue('inviteeEmail', null)
       setAnchorPopoverElement(null)
       toast.success('Invite user successfully!')
+
+      // Emit event to server to notify to invited user
+      socketIoInstance.emit('fe-invite-user-to-board', invitation)
     })
   }
 
