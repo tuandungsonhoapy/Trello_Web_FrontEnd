@@ -8,22 +8,19 @@ import Workspaces from '@/layouts/Header/Menus/Workspaces'
 import Recent from '@/layouts/Header/Menus/Recent'
 import Starred from '@/layouts/Header/Menus/Starred'
 import Templates from '@/layouts/Header/Menus/Templates'
-import { Button, InputAdornment, TextField } from '@mui/material'
-import { useState } from 'react'
+import { Button } from '@mui/material'
 import Tooltip from '@mui/material/Tooltip'
 import HelpOutlineIcon from '@mui/icons-material/HelpOutline'
 import AccountMenu from '@/layouts/Header/Menus/Profiles'
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
-import SearchIcon from '@mui/icons-material/Search'
+
 import OptionMenu from '@/layouts/Header/Menus'
-import HighlightOffOutlinedIcon from '@mui/icons-material/HighlightOffOutlined'
-import { cssTextFieldCustomText } from '@/utils/constants'
 import { Link } from 'react-router-dom'
 import { useAppSelector } from '@/hooks/reduxHooks'
 import Notifications from '@/layouts/Header/Notifications/Notifications'
+import AutoCompleteSearchBoard from '@/layouts/Header/SearchBoards/AutoCompleteSearchBoard'
 
 const Header = () => {
-  const [searchValue, setSearchValue] = useState('')
   const activeBoard = useAppSelector((state) => state.boards.activeBoard)
 
   return (
@@ -118,38 +115,7 @@ const Header = () => {
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-        <TextField
-          size="small"
-          id="outlined-search"
-          label="Search field"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          type="text"
-          sx={{
-            minWidth: '150px',
-            maxWidth: '220px',
-            ...cssTextFieldCustomText
-          }}
-          InputProps={{
-            startAdornment: (
-              <InputAdornment position="start">
-                <SearchIcon sx={{ color: 'customText.primary' }} />
-              </InputAdornment>
-            ),
-            endAdornment: (
-              <InputAdornment position="end">
-                <HighlightOffOutlinedIcon
-                  fontSize="small"
-                  sx={{
-                    color: searchValue ? 'customText.primary' : 'transparent',
-                    cursor: 'pointer'
-                  }}
-                  onClick={() => setSearchValue('')}
-                />
-              </InputAdornment>
-            )
-          }}
-        />
+        <AutoCompleteSearchBoard />
         <ModeToggle />
 
         <Notifications />
