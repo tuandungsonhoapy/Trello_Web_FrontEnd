@@ -40,6 +40,8 @@ import { cardInterface } from '@/interface/board-interface'
 import { updateCard } from '@/redux/boardsSlice'
 import { commnetInterface } from '@/interface/comment-interface'
 import { CARD_MEMBER_ACTIONS } from '@/utils/constants'
+import { socketIoInstance } from '@/socket'
+import { useEffect } from 'react'
 
 const SidebarItem = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -91,6 +93,8 @@ function ActiveCard() {
     // Cập nhật lại card trong activeBoard của Redux
     dispatch(updateCard(cardResponse as cardInterface))
 
+    socketIoInstance.emit('fe-update-card', cardResponse)
+
     return cardResponse
   }
 
@@ -139,6 +143,18 @@ function ActiveCard() {
   const onUpdateCardMember = (data: { userId: string; action: string }) => {
     callApiUpdateCard({ incomingMember: data } as incomingMemberInterface)
   }
+
+  useEffect(() => {
+    const handleReceiveUpdateCard = (card: cardInterface) => {
+      dispatch(setActiveCard(card))
+    }
+
+    socketIoInstance.on('be-update-card', handleReceiveUpdateCard)
+
+    return () => {
+      socketIoInstance.off('be-update-card', handleReceiveUpdateCard)
+    }
+  }, [dispatch])
 
   return (
     <Modal
