@@ -9,9 +9,9 @@ export default defineConfig({
   resolve: {
     alias: [{ find: '@', replacement: '/src' }]
   },
-  // optimizeDeps: {
-  //   include: ['@emotion/react', '@emotion/styled']
-  // },
+  optimizeDeps: {
+    include: ['@emotion/react', '@emotion/styled', '@mui/material/Tooltip']
+  },
   server: {
     open: true,
     host: true,
