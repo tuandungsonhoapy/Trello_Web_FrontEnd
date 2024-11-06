@@ -14,6 +14,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks'
 import { logoutUserAPI } from '@/redux/authSlice'
 import { useConfirm } from 'material-ui-confirm'
 import { Link } from 'react-router-dom'
+import { clearActiveBoard } from '@/redux/boardsSlice'
 
 export default function AccountMenu() {
   const currentUser = useAppSelector((state) => state.auth.currentUser)
@@ -52,6 +53,7 @@ export default function AccountMenu() {
     })
       .then(() => {
         dispatch(logoutUserAPI())
+        dispatch(clearActiveBoard())
       })
       .catch(() => {})
   }

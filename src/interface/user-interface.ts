@@ -5,6 +5,8 @@ export interface userInterface {
   displayName: string
   avatar: string | null
   role: string
+  require_2fa: boolean
+  is_2fa_verified?: boolean
   isActive: boolean
   createdAt?: string
   updatedAt?: string | null

@@ -171,6 +171,9 @@ const boardsSlice = createSlice({
           columnContainCard.cardOrderIds = [columnContainCard.cards[0]._id]
         }
       }
+    },
+    clearActiveBoard(state) {
+      state.activeBoard = null
     }
   },
   extraReducers: (builder) => {
@@ -222,7 +225,8 @@ export const {
   updateColumn,
   deleteColumn,
   updateCard,
-  deleteCard
+  deleteCard,
+  clearActiveBoard
 } = boardsSlice.actions
 
 export default boardsSlice.reducer

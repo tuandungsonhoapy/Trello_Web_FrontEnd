@@ -12,11 +12,19 @@ import { useForm } from 'react-hook-form'
 import { useConfirm } from 'material-ui-confirm'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { securitySchema, SecuritySchemaType } from '@/utils/validationSchemas'
-import { useAppDispatch } from '@/hooks/reduxHooks'
+import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks'
 import { logoutUserAPI, updateUserAPI } from '@/redux/authSlice'
 import { toast } from 'react-toastify'
+import { useState } from 'react'
+import Setup2FA from '@/components/2fa/setup-2fa'
+import { Alert } from '@mui/material'
+import Disable2fa from '@/components/2fa/disable-2fa'
 
 function SecurityTab() {
+  const [openSetup2FA, setOpenSetup2FA] = useState(false)
+  const [openDisable2FA, setOpenDisable2FA] = useState(false)
+  const user = useAppSelector((state) => state.auth.currentUser)
+
   const dispatch = useAppDispatch()
 
   const {
@@ -80,6 +88,8 @@ function SecurityTab() {
         justifyContent: 'center'
       }}
     >
+      <Setup2FA isOpen={openSetup2FA} toggleOpen={setOpenSetup2FA} />
+      <Disable2fa isOpen={openDisable2FA} toggleOpen={setOpenDisable2FA} />
       <Box
         sx={{
           maxWidth: '1200px',
@@ -175,11 +185,66 @@ function SecurityTab() {
                 className="interceptor-loading"
                 type="submit"
                 variant="contained"
-                color="primary"
+                sx={{ bgcolor: 'constrastMode.main' }}
                 fullWidth
               >
                 Change
               </Button>
+            </Box>
+
+            <Alert
+              severity={`${user?.require_2fa ? 'success' : 'warning'}`}
+              sx={{ '.MuiAlert-message': { overflow: 'hidden' } }}
+            >
+              Tình trạng bảo mật tài khoản:&nbsp;
+              <Typography
+                component="span"
+                sx={{
+                  fontWeight: 'bold',
+                  '&:hover': { color: '#e67e22', cursor: 'pointer' }
+                }}
+              >
+                {user?.require_2fa ? 'Đã Bật' : 'Chưa Bật'} xác thực 2 lớp -
+                Two-Factor Authentication (2FA)
+              </Typography>
+            </Alert>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'end',
+                gap: 2,
+                mt: 1
+              }}
+            >
+              {!user?.require_2fa && (
+                <Button
+                  type="button"
+                  variant="contained"
+                  size="large"
+                  sx={{
+                    maxWidth: 'max-content',
+                    bgcolor: 'constrastMode.main'
+                  }}
+                  onClick={() => setOpenSetup2FA(true)}
+                >
+                  Enable 2FA
+                </Button>
+              )}
+              {user?.require_2fa && (
+                <Button
+                  type="button"
+                  variant="contained"
+                  size="large"
+                  sx={{
+                    maxWidth: 'max-content',
+                    bgcolor: 'constrastMode.main'
+                  }}
+                  onClick={() => setOpenDisable2FA(true)}
+                >
+                  Disable 2FA
+                </Button>
+              )}
             </Box>
           </Box>
         </form>

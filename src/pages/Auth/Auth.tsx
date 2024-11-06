@@ -24,7 +24,8 @@ function Auth() {
         minHeight: '100vh',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        background: 'url("src/assets/auth/login-register-bg.jpg")',
+        background:
+          'url("https://res.cloudinary.com/dhb6hqgak/image/upload/v1730825278/trelloCardCover/lxvps9ctm6fnxjovo5n0.jpg")',
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
         backgroundPosition: 'center',

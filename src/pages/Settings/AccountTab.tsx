@@ -121,6 +121,7 @@ function AccountTab() {
                 component="label"
                 variant="contained"
                 size="small"
+                sx={{ bgcolor: 'constrastMode.main' }}
                 startIcon={<CloudUploadIcon />}
               >
                 Upload
@@ -207,6 +208,7 @@ function AccountTab() {
                 type="submit"
                 variant="contained"
                 color="primary"
+                sx={{ bgcolor: 'constrastMode.main' }}
                 fullWidth
               >
                 Update

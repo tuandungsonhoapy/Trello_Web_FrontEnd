@@ -16,7 +16,7 @@ export const injectStore = (store: Store) => {
 // Tạo một instance của Axios
 const axiosInstance = axios.create({
   baseURL: API_ROOT,
-  timeout: 1000 * 60
+  timeout: 1000 * 60 * 5
 })
 
 axiosInstance.defaults.withCredentials = true

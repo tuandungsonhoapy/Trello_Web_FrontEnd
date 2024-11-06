@@ -29,3 +29,23 @@ export const refreshTokenAPI = async () => {
   const response = await axiosInstance.get('/users/refresh-token')
   return response.data
 }
+
+export const get2faQRCodeAPI = async () => {
+  const response = await axiosInstance.get('/users/get-2fa-qr-code')
+  return response.data
+}
+
+export const enable2faAPI = async (data: { otpToken: string }) => {
+  const response = await axiosInstance.post('/users/enable-2fa', data)
+  return response.data
+}
+
+export const verify2faAPI = async (data: { otpToken: string }) => {
+  const response = await axiosInstance.put('/users/verify-2fa', data)
+  return response.data
+}
+
+export const disable2faAPI = async (data: { otpToken: string }) => {
+  const response = await axiosInstance.put('/users/disable-2fa', data)
+  return response.data
+}

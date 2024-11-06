@@ -46,7 +46,14 @@ export const updateUserAPI = createAsyncThunk(
 const AuthSlice = createSlice({
   name: 'auth',
   initialState,
-  reducers: {},
+  reducers: {
+    updateCurrentUser: (state, action: PayloadAction<userInterface>) => {
+      state.currentUser = action.payload
+    },
+    clearCurrentUser: (state) => {
+      state.currentUser = null
+    }
+  },
   extraReducers: (builder) => {
     builder
       .addCase(
@@ -72,6 +79,6 @@ const AuthSlice = createSlice({
   }
 })
 
-// export const {} = boardsSlice.actions
+export const { updateCurrentUser, clearCurrentUser } = AuthSlice.actions
 
 export default AuthSlice.reducer

@@ -18,7 +18,6 @@ import FieldErrorAlert from '@/components/Form/FieldErrorAlert'
 import { useAppDispatch } from '@/hooks/reduxHooks'
 import { loginUserAPI } from '@/redux/authSlice'
 import { useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
 
 function LoginForm() {
   const dispatch = useAppDispatch()
@@ -37,12 +36,8 @@ function LoginForm() {
   const registeredEmail = searchParams.get('registeredEmail')
 
   const handleLogin = (data: LoginSchemaType) => {
-    toast
-      .promise(dispatch(loginUserAPI(data)).unwrap(), {
-        pending: 'Logging in...',
-        success: 'Login successfully!',
-        error: 'Login failed!'
-      })
+    dispatch(loginUserAPI(data))
+      .unwrap()
       .then(() => {
         navigate('/')
       })

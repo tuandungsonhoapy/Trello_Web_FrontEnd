@@ -11,10 +11,15 @@ import { userInterface } from '@/interface/user-interface'
 import { useAppSelector } from '@/hooks/reduxHooks'
 import Settings from '@/pages/Settings/Settings'
 import Boards from '@/pages/Boards'
+import Require2FA from '@/components/2fa/require-2fa'
 
 const ProtectedRoute = ({ user }: { user: userInterface | null }) => {
   if (!user) {
     return <Navigate to="/login" replace={true} />
+  }
+
+  if (user.require_2fa && !user.is_2fa_verified) {
+    return <Navigate to="/verify-2fa" replace={true} />
   }
   return <Outlet />
 }
@@ -59,6 +64,7 @@ function App() {
         <Route path="/login" element={<Auth />} />
         <Route path="/register" element={<Auth />} />
         <Route path="/verify-account" element={<AccountVerification />} />
+        <Route path="/verify-2fa" element={<Require2FA />} />
 
         {/* 404 not found page */}
         <Route path="*" element={<NotFound />} />
