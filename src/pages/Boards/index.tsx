@@ -25,7 +25,7 @@ import { styled } from '@mui/material/styles'
 import { getBoardsAPI } from '@/apis/boardAPI'
 import { DEFAULT_LIMIT_PER_PAGE, DEFAULT_PAGE } from '@/utils/constants'
 import { boardInterface } from '@/interface/board-interface'
-// Styles của mấy cái Sidebar item menu, anh gom lại ra đây cho gọn.
+
 const SidebarItem = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',

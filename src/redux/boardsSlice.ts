@@ -174,6 +174,19 @@ const boardsSlice = createSlice({
     },
     clearActiveBoard(state) {
       state.activeBoard = null
+    },
+    updateMemberIds(state, action: PayloadAction<boardInterface>) {
+      if (state.activeBoard) {
+        state.activeBoard.memberIds = action.payload.memberIds
+
+        state.activeBoard.members = state.activeBoard.members?.filter(
+          (member) => action.payload.memberIds?.includes(member._id)
+        )
+
+        state.activeBoard.FE_allUsers = state.activeBoard.FE_allUsers?.filter(
+          (user) => action.payload.memberIds?.includes(user._id)
+        )
+      }
     }
   },
   extraReducers: (builder) => {
@@ -226,7 +239,8 @@ export const {
   deleteColumn,
   updateCard,
   deleteCard,
-  clearActiveBoard
+  clearActiveBoard,
+  updateMemberIds
 } = boardsSlice.actions
 
 export default boardsSlice.reducer

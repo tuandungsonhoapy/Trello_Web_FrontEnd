@@ -33,8 +33,6 @@ function Setup2FA({
     setQrCode(null)
   }
 
-  console.log('setup 2fa re-render')
-
   const handleConfirmSetup2FA = () => {
     if (!otpToken) {
       const errMsg = 'Please enter your otp token.'
@@ -181,7 +179,8 @@ function Setup2FA({
                 textTransform: 'none',
                 minWidth: '120px',
                 height: '55px',
-                fontSize: '1em'
+                fontSize: '1em',
+                bgcolor: 'constrastMode.main'
               }}
               onClick={handleConfirmSetup2FA}
             >

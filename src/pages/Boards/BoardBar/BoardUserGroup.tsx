@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import Box from '@mui/material/Box'
-import Avatar from '@mui/material/Avatar'
 import Tooltip from '@mui/material/Tooltip'
 import Popover from '@mui/material/Popover'
 import { userInterface } from '@/interface/user-interface'
+import UserMenu from '@/pages/Boards/BoardBar/UserMenu/UserMenu'
 
 function BoardUserGroup({
   boardUsers = [],
@@ -30,15 +30,7 @@ function BoardUserGroup({
       {/* Hiển thị giới hạn số lượng user theo số limit */}
       {boardUsers.map((user, index) => {
         if (index < limit) {
-          return (
-            <Tooltip title={user?.displayName} key={user._id}>
-              <Avatar
-                sx={{ width: 34, height: 34, cursor: 'pointer' }}
-                alt={user?.displayName}
-                src={user?.avatar || ''}
-              />
-            </Tooltip>
-          )
+          return <UserMenu user={user} key={user._id} />
         }
       })}
 
@@ -85,13 +77,7 @@ function BoardUserGroup({
           }}
         >
           {boardUsers.map((user) => (
-            <Tooltip title={user?.displayName} key={user._id}>
-              <Avatar
-                sx={{ width: 34, height: 34, cursor: 'pointer' }}
-                alt={user?.displayName}
-                src={user?.avatar || ''}
-              />
-            </Tooltip>
+            <UserMenu user={user} key={user._id} />
           ))}
         </Box>
       </Popover>

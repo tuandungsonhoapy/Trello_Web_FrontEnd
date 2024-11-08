@@ -35,3 +35,11 @@ export const createBoardAPI = async (data: boardInterface) => {
   const response = await axiosInstance.post('/boards', data)
   return response.data
 }
+
+export const removeUserFromBoardAPI = async (data: {
+  boardId: string
+  userId: string
+}) => {
+  const response = await axiosInstance.put('/boards/remove-user', data)
+  return response.data
+}
