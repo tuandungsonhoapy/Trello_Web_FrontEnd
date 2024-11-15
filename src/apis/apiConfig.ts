@@ -54,9 +54,9 @@ axiosInstance.interceptors.response.use(
     interceptorLoadingElements(false)
 
     // * Lỗi 401: Thực hiện logout
-    // if (error.response?.status === 401) {
-    //   ;(reduxStore.dispatch as AppDispatch)(logoutUserAPI())
-    // }
+    if (error.response?.status === 401) {
+      ;(reduxStore.dispatch as AppDispatch)(logoutUserAPI())
+    }
 
     const originalRequest = error.config
     if (error.response?.status === 410 && !originalRequest._retry) {
