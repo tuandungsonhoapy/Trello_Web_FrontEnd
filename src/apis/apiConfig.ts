@@ -3,7 +3,7 @@ import { API_ROOT } from '@/utils/constants'
 import { toast } from 'react-toastify'
 import { interceptorLoadingElements } from '@/utils/formatter'
 import { refreshTokenAPI } from '@/apis/userAPI'
-import { logoutUserAPI } from '@/redux/authSlice'
+import { handleUnauthenticatedAPI, logoutUserAPI } from '@/redux/authSlice'
 import { Store, Dispatch } from 'redux'
 import { AppDispatch } from '@/redux/store'
 
@@ -55,7 +55,7 @@ axiosInstance.interceptors.response.use(
 
     // * Lỗi 401: Thực hiện logout
     if (error.response?.status === 401) {
-      ;(reduxStore.dispatch as AppDispatch)(logoutUserAPI())
+      ;(reduxStore.dispatch as AppDispatch)(handleUnauthenticatedAPI())
     }
 
     const originalRequest = error.config

@@ -59,16 +59,6 @@ function RegisterForm() {
               <TrelloIcon />
             </Avatar>
           </Box>
-          <Box
-            sx={{
-              marginTop: '1em',
-              display: 'flex',
-              justifyContent: 'center',
-              color: (theme) => theme.palette.grey[500]
-            }}
-          >
-            Author: tddev
-          </Box>
           <Box sx={{ padding: '0 1em 1em 1em' }}>
             <Box sx={{ marginTop: '1em' }}>
               <TextField

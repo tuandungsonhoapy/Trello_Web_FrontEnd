@@ -27,6 +27,14 @@ export const logoutUserAPI = createAsyncThunk(
   }
 )
 
+export const handleUnauthenticatedAPI = createAsyncThunk(
+  'auth/handleUnauthenticatedAPI',
+  async () => {
+    const response = await axiosInstance.delete('/users/handleUnauthenticated')
+    return response.data
+  }
+)
+
 export const updateUserAPI = createAsyncThunk(
   'auth/updateUserAPI',
   async (
@@ -74,6 +82,14 @@ const AuthSlice = createSlice({
         updateUserAPI.fulfilled,
         (state, action: PayloadAction<userInterface>) => {
           state.currentUser = { ...state.currentUser, ...action.payload }
+        }
+      )
+      .addCase(
+        handleUnauthenticatedAPI.fulfilled,
+        (state, action: PayloadAction<{ loggedOut: boolean }>) => {
+          if (action.payload.loggedOut) {
+            state.currentUser = null
+          }
         }
       )
   }
