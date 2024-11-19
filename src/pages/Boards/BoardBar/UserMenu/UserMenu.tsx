@@ -11,8 +11,11 @@ import MessageIcon from '@mui/icons-material/Message'
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove'
 import { useAppDispatch, useAppSelector } from '@/hooks/reduxHooks'
 import { removeUserFromBoardAPI } from '@/apis/boardAPI'
-import { updateMemberIds } from '@/redux/boardsSlice'
-import { boardInterface } from '@/interface/board-interface'
+import {
+  updateCardsAfterRemoveMember,
+  updateMemberIds
+} from '@/redux/boardsSlice'
+import { boardInterface, cardInterface } from '@/interface/board-interface'
 import { toast } from 'react-toastify'
 import { socketIoInstance } from '@/socket'
 
@@ -35,7 +38,13 @@ export default function UserMenu({ user }: { user: userInterface }) {
       boardId: board?._id || '',
       userId: user._id
     }).then((board) => {
+      console.log('🚀 ~ handleRemoveUser ~ board:', board)
       dispatch(updateMemberIds(board as boardInterface))
+      dispatch(
+        updateCardsAfterRemoveMember(
+          board.listCardToRemoveUser as Array<cardInterface>
+        )
+      )
       toast.success('User removed from board!')
       socketIoInstance.emit('fe-remove-user-from-board', board)
     })

@@ -184,8 +184,29 @@ const boardsSlice = createSlice({
         )
 
         state.activeBoard.FE_allUsers = state.activeBoard.FE_allUsers?.filter(
-          (user) => action.payload.memberIds?.includes(user._id)
+          (user) =>
+            action.payload.memberIds
+              ?.concat(action.payload?.ownerIds || [])
+              .includes(user._id)
         )
+      }
+    },
+    updateCardsAfterRemoveMember(
+      state,
+      action: PayloadAction<Array<cardInterface>>
+    ) {
+      if (state.activeBoard) {
+        state.activeBoard.columns?.forEach((column) => {
+          column.cards?.forEach((card, index) => {
+            if (action.payload.some((c) => c._id === card._id)) {
+              if (column.cards) {
+                column.cards[index] = action.payload.find(
+                  (c) => c._id === card._id
+                ) as cardInterface
+              }
+            }
+          })
+        })
       }
     }
   },
@@ -240,7 +261,8 @@ export const {
   updateCard,
   deleteCard,
   clearActiveBoard,
-  updateMemberIds
+  updateMemberIds,
+  updateCardsAfterRemoveMember
 } = boardsSlice.actions
 
 export default boardsSlice.reducer
