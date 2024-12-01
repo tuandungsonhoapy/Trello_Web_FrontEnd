@@ -22,6 +22,8 @@ import { styled } from '@mui/material/styles'
 import { createBoardAPI } from '@/apis/boardAPI'
 import { boardInterface } from '@/interface/board-interface'
 import { toast } from 'react-toastify'
+import { useQueryClient } from '@tanstack/react-query'
+import { boardKeys } from '@/reactQuery/queryKeys'
 const SidebarItem = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
@@ -40,7 +42,7 @@ const SidebarItem = styled(Box)(({ theme }) => ({
   }
 }))
 
-function SidebarCreateBoardModal({ fetchBoards }: { fetchBoards: () => void }) {
+function SidebarCreateBoardModal() {
   const {
     control,
     register,
@@ -50,6 +52,8 @@ function SidebarCreateBoardModal({ fetchBoards }: { fetchBoards: () => void }) {
   } = useForm<BoardSchemaType>({
     resolver: zodResolver(boardSchema)
   })
+
+  const queryClient = useQueryClient()
 
   const [isOpen, setIsOpen] = useState(false)
   const handleOpenModal = () => setIsOpen(true)
@@ -64,7 +68,9 @@ function SidebarCreateBoardModal({ fetchBoards }: { fetchBoards: () => void }) {
     createBoardAPI(data as boardInterface).then(() => {
       handleCloseModal()
       toast.success('Create board successfully')
-      fetchBoards()
+      queryClient.invalidateQueries({
+        queryKey: boardKeys.all
+      })
     })
   }
 

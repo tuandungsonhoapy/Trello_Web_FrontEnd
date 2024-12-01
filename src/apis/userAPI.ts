@@ -49,3 +49,23 @@ export const disable2faAPI = async (data: { otpToken: string }) => {
   const response = await axiosInstance.put('/users/disable-2fa', data)
   return response.data
 }
+
+export const fetchUsers = async (page: number, limit: number) => {
+  const response = await axiosInstance.get(`/users?page=${page}&limit=${limit}`)
+  return response.data
+}
+
+export const deactivateUserAPI = async (userId: string) => {
+  const response = await axiosInstance.put('/users/deactivate', { userId })
+  return response.data
+}
+
+export const activateUserAPI = async (userId: string) => {
+  const response = await axiosInstance.put('/users/activate', { userId })
+  return response.data
+}
+
+export const getUsers = async (searchPath: string) => {
+  const response = await axiosInstance.get(`/users${searchPath}`)
+  return response.data
+}

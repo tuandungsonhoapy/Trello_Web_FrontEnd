@@ -20,18 +20,27 @@ const persistor = persistStore(store)
 // * Inject store to axios
 injectStore(store)
 
+// * Config react query
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
+const queryClient = new QueryClient()
+
 createRoot(document.getElementById('root')!).render(
   <Provider store={store}>
-    <PersistGate persistor={persistor} loading={null}>
-      <BrowserRouter>
-        <CssVarsProvider theme={theme}>
-          <GlobalStyles styles={{ a: { textDecoration: 'none' } }} />
-          <CssBaseline />
-          <ConfirmProvider>
-            <App />
-          </ConfirmProvider>
-        </CssVarsProvider>
-      </BrowserRouter>
-    </PersistGate>
+    <QueryClientProvider client={queryClient}>
+      <PersistGate persistor={persistor} loading={null}>
+        <BrowserRouter>
+          <CssVarsProvider theme={theme}>
+            <GlobalStyles styles={{ a: { textDecoration: 'none' } }} />
+            <CssBaseline />
+            <ConfirmProvider>
+              <App />
+            </ConfirmProvider>
+          </CssVarsProvider>
+        </BrowserRouter>
+      </PersistGate>
+      <ReactQueryDevtools initialIsOpen={false} />
+    </QueryClientProvider>
   </Provider>
 )

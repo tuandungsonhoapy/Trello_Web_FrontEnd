@@ -15,6 +15,8 @@ import { logoutUserAPI } from '@/redux/authSlice'
 import { useConfirm } from 'material-ui-confirm'
 import { Link } from 'react-router-dom'
 import { clearActiveBoard } from '@/redux/boardsSlice'
+import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings'
+import { userRoles } from '@/utils/constants'
 
 export default function AccountMenu() {
   const currentUser = useAppSelector((state) => state.auth.currentUser)
@@ -120,6 +122,17 @@ export default function AccountMenu() {
           </MenuItem>
         </Link>
         <Divider />
+        {currentUser?.role === userRoles.ADMIN && (
+          <Link to={'/admin'} style={{ color: 'inherit' }}>
+            <MenuItem onClick={handleClose}>
+              <ListItemIcon>
+                <AdminPanelSettingsIcon fontSize="small" />
+              </ListItemIcon>
+              Admin Page
+            </MenuItem>
+          </Link>
+        )}
+
         <MenuItem onClick={handleClose}>
           <ListItemIcon>
             <PersonAdd fontSize="small" />

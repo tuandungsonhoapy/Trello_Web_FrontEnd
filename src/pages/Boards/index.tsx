@@ -1,4 +1,3 @@
-import { useState, useEffect, useCallback } from 'react'
 import Header from '@/layouts/Header'
 import LoadingSpinner from '@/components/Loading/LoadingSpinner'
 import Container from '@mui/material/Container'
@@ -22,9 +21,8 @@ import randomColor from 'randomcolor'
 import SidebarCreateBoardModal from './create'
 
 import { styled } from '@mui/material/styles'
-import { getBoardsAPI } from '@/apis/boardAPI'
 import { DEFAULT_LIMIT_PER_PAGE, DEFAULT_PAGE } from '@/utils/constants'
-import { boardInterface } from '@/interface/board-interface'
+import { useQueryBoard } from '@/reactQuery/queryBoardFn'
 
 const SidebarItem = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -45,10 +43,6 @@ const SidebarItem = styled(Box)(({ theme }) => ({
 }))
 
 function Boards() {
-  const [boards, setBoards] = useState<Array<boardInterface> | null>(null)
-  // Tổng toàn bộ số lượng bản ghi boards có trong Database mà phía BE trả về để FE dùng tính toán phân trang
-  const [totalBoards, setTotalBoards] = useState<number | null>(null)
-
   // Xử lý phân trang từ url với MUI: https://mui.com/material-ui/react-pagination/#router-integration
   const location = useLocation()
   /**
@@ -59,20 +53,21 @@ function Boards() {
 
   const page = parseInt(query.get('page') || '1', 10)
 
-  const fetchBoards = useCallback(() => {
-    getBoardsAPI(location.search).then((res) => {
-      setBoards(res.boards || [])
-      setTotalBoards(res.numberBoards || 0)
-    })
-  }, [location.search])
+  const { isLoading, error, data } = useQueryBoard({
+    isKeepPreviousData: true,
+    page: page,
+    limit: DEFAULT_LIMIT_PER_PAGE
+  })
 
-  useEffect(() => {
-    fetchBoards()
-  }, [fetchBoards])
+  const boards = data?.boards || []
+  const totalBoards = data?.numberBoards || 0
 
-  // Lúc chưa tồn tại boards > đang chờ gọi api thì hiện loading
-  if (!boards) {
+  if (isLoading) {
     return <LoadingSpinner caption="Loading Boards..." />
+  }
+
+  if (error) {
+    return <div>An error has occurred: {error.message}</div>
   }
 
   return (
@@ -97,7 +92,7 @@ function Boards() {
             </Stack>
             <Divider sx={{ my: 1 }} />
             <Stack direction="column" spacing={1}>
-              <SidebarCreateBoardModal fetchBoards={fetchBoards} />
+              <SidebarCreateBoardModal />
             </Stack>
           </Grid>
 
@@ -114,9 +109,9 @@ function Boards() {
             )}
 
             {/* Trường hợp gọi API và có boards trong Database trả về thì render danh sách boards */}
-            {boards?.length > 0 && (
+            {boards?.length && boards?.length > 0 && (
               <Grid container spacing={2}>
-                {boards.map((board) => (
+                {boards?.map((board) => (
                   <Grid xs={2} sm={3} md={4} key={board._id}>
                     <Card sx={{ width: '250px' }}>
                       {/* <CardMedia component="img" height="100" image="https://picsum.photos/100" /> */}

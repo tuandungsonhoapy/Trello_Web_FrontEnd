@@ -44,7 +44,7 @@ function AutoCompleteSearchBoard() {
       })
       .finally(() => setLoading(false))
   }
-  const debounceSearchBoard = useDebounce(handleInputSearchChange, 1000)
+  const debounceSearchBoard = useDebounce(handleInputSearchChange, 800)
 
   const handleSelectedBoard = (
     _event: React.SyntheticEvent<Element, Event>,
